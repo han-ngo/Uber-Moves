@@ -33,16 +33,18 @@ class GeoMap {
             console.log("drawing");
             console.log(projection([-73.9549, 40.769])[0]);
 
-            d3.select(".maptalks-front-layer");
-            
             var svg = d3.select(ctx);
+            var boxInfo = svg.attr("viewBox").split(" ");
+            var scale = +boxInfo[2] / 800;
+
             var trans = projection([-73.9549, 40.769]);
+            svg.html("");
             svg.append("circle")
                 .attr("cx", projection([-73.9549, 40.769])[0]
                 )
                 .attr("cy", projection([-73.9549, 40.769])[1]
                 )
-                .attr("r", 25.0)
+                .attr("r", 25.0 * scale)
                 .style("fill", "steelblue")
                 .style("opacity", 0.8);
         };

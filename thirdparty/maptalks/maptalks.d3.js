@@ -207,6 +207,7 @@
             {
                 this._d3zoom = map.getZoom();
             }
+
             var me = this;
 
             var proj = function proj(x, y) {
