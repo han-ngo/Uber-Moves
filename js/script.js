@@ -9,15 +9,18 @@ function httpGetAsync(theUrl, callback) {
 }
 
 d3.json("data/here.json").then(here => {
-    let testHereRestApi = () => {
-        let lat = 40.769;
-        let lon = -73.9549;
+    // let testHereRestApi = () => {
+    //     let lat = 40.769;
+    //     let lon = -73.9549;
 
-        let appId = here.APP_ID;
-        let appCode = here.APP_CODE;
+    //     let appId = here.APP_ID;
+    //     let appCode = here.APP_CODE;
 
-        httpGetAsync(`https://places.cit.api.here.com/places/v1/autosuggest?at=${lat},${lon}&q=chrysler&app_id=${appId}&app_code=${appCode}`, (result) => {
-            console.log(result);
-        });
-    }
+    //     httpGetAsync(`https://places.cit.api.here.com/places/v1/autosuggest?at=${lat},${lon}&q=chrysler&app_id=${appId}&app_code=${appCode}`, (result) => {
+    //         console.log(result);
+    //     });
+    // }
 });
+
+let map = new GeoMap();
+AppManager.getInstance().setMap(map);
