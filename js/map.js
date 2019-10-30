@@ -10,7 +10,7 @@ class GeoMap {
             .style("width", "800px")
             .style("height", "600px");
 
-            //40.769,
+        //40.769,
         var map = new maptalks.Map(MAP_CONTAINER, {
             center: [-73.9549, 40.769],
             zoom: 12,
@@ -21,5 +21,52 @@ class GeoMap {
             })
         });
         d3.select(".maptalks-attribution").style("opacity", 0);
+
+        var d3Layer = new maptalks.D3Layer('d3', { 'renderer': 'dom', 'hideWhenZooming': false });
+
+        d3Layer.prepareToDraw = function (ctx, projection) {
+            //preparation
+        };
+
+        d3Layer.draw = function (ctx, projection) {
+            //drawing the layer
+            console.log("drawing");
+            console.log(projection([-73.9549, 40.769])[0]);
+
+            d3.select(".maptalks-front-layer");
+            
+            var svg = d3.select(ctx);
+            var trans = projection([-73.9549, 40.769]);
+            svg.append("circle")
+                .attr("cx", projection([-73.9549, 40.769])[0]
+                )
+                .attr("cy", projection([-73.9549, 40.769])[1]
+                )
+                .attr("r", 25.0)
+                .style("fill", "steelblue")
+                .style("opacity", 0.8);
+        };
+
+        map.addLayer(d3Layer);
+
+        map.on('moving moveend', function (e) {
+            d3Layer.redraw();
+            console.log("redraw");
+        });
+
+        map.on('zooming zoomend', function (e) {
+            d3Layer.redraw();
+            console.log("redraw");
+        });
+
+        map.on('pitch', function (e) {
+            d3Layer.redraw();
+            console.log("redraw");
+        });
+
+        map.on('rotate', function (e) {
+            d3Layer.redraw();
+            console.log("redraw");
+        });
     }
 }
