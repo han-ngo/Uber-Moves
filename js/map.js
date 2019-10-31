@@ -70,5 +70,9 @@ class GeoMap {
             d3Layer.redraw();
             console.log("redraw");
         });
+
+        // try heat map
+        var data = [[-73.9549, 40.769, 0.3], [-73.9549, 40.769, 0.4], [-63.9549, 30.769, 0.4], [-86.9549, 40.769, 1.2], [-72.9549, 41.769, 0.8], [-71.9549, 40.769, 0.1]];
+        var heatLayer = new maptalks.HeatLayer('heat', data).addTo(map);
     }
 }
