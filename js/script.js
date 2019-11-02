@@ -22,5 +22,10 @@
 //     // }
 // });
 
-let map = new GeoMap();
-AppManager.getInstance().setMap(map);
+d3.json("data/newyork.geojson").then(nyGeoJson=>{
+    AppManager.getInstance().NewYorkGeoJson = nyGeoJson;
+    let map = new GeoMap();
+    AppManager.getInstance().setMap(map);
+})
+
+

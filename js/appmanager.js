@@ -27,4 +27,6 @@ class AppManager {
     setMap(map) {
         this.map = map;
     }
+
+    NewYorkGeoJson;
 }
