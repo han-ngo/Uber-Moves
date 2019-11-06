@@ -28,5 +28,7 @@ class AppManager {
         this.map = map;
     }
 
+    UberData;
+
     NewYorkGeoJson;
 }

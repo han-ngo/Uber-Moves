@@ -64,19 +64,21 @@ class GeoMap {
             //preparation
         };
 
-        this.d3Layer.draw = (ctx, projection)=>{
+        this.d3Layer.draw = (ctx, projection) => {
             //drawing the layer
             console.log("drawing");
             console.log(projection([-73, 40.769])[0]);
 
-            var svg = d3.select(ctx);
+            let svg = d3.select(ctx);
             var boxInfo = svg.attr("viewBox").split(" ");
             var scale = +boxInfo[2] / 800;
 
-            let circles = svg.selectAll("circle").data(this.data);
+            this.circles = svg.selectAll("circle").data(this.data);
+
+            let opacity = this.heatLayerToggle?0:0.8;
 
             // svg.html("");
-            circles
+            this.circles = this.circles
                 .join("circle")
                 .attr("cx", d => {
                     return projection([d.Lon, d.Lat])[0];
@@ -87,37 +89,108 @@ class GeoMap {
                 )
                 .attr("r", 5.0 * scale)
                 .style("fill", "steelblue")
-                .style("opacity", 0.8);
+                .style("opacity", opacity);
         };
 
         map.addLayer(this.d3Layer);
 
-        map.on('moving moveend', (e)=>{
+        map.on('moving moveend', (e) => {
             this.d3Layer.redraw();
             console.log("redraw");
         });
 
-        map.on('zooming zoomend', (e)=>{
+        map.on('zooming zoomend', (e) => {
             this.d3Layer.redraw();
             console.log("redraw");
         });
 
-        map.on('pitch', (e)=>{
+        map.on('pitch', (e) => {
             this.d3Layer.redraw();
             console.log("redraw");
         });
 
-        map.on('rotate', (e)=>{
+        map.on('rotate', (e) => {
             this.d3Layer.redraw();
             console.log("redraw");
         });
 
         // try heat map
         // var data = [[-73.9549, 40.769, 0.3], [-73.9549, 40.769, 0.4], [-63.9549, 30.769, 0.4], [-86.9549, 40.769, 1.2], [-72.9549, 41.769, 0.8], [-71.9549, 40.769, 0.1]];
-        // var heatLayer = new maptalks.HeatLayer('heat', data).addTo(map);
+        this.heatLayer = new maptalks.HeatLayer('heat', []).addTo(map);
+        this.heatLayer.config({
+            'radius' : 15,
+            'blur' : 4,
+            'gradient' : {0.4: 'blue', 0.65: 'lime', 1: 'red'}
+        });
+        // toolbar for debugging
+        // vertical one on top right
+        new maptalks.control.Toolbar({
+            'vertical': true,
+            'position': 'top-right',
+            'items': [{
+                item: 'Heat Map Toggle',
+                click: () => {
+                    this.toggleHeatLayer();
+                }
+            }, {
+                item: 'Test Time Filter',
+                click: () => {
+                    this.filtByHourTime(12, 13);
+                }
+            }]
+        })
+            .addTo(map);
     }
 
+    heatLayerToggle = false;
+
+    toggleHeatLayer(){
+        this.heatLayerToggle = !this.heatLayerToggle;
+        if(this.heatLayerToggle)
+        {
+            this.renderHeatMap(this.data);
+            this.hideCircles();
+        }
+        else
+        {
+            this.heatLayer.clear();
+            this.showCircles();
+        }
+    }
+
+    hideCircles()
+    {
+        this.circles.style("opacity", 0);
+    }
+
+    showCircles()
+    {
+        this.circles.style("opacity", 0.8);
+    }
+
+    renderHeatMap(data){
+        let heatMapData = data.map(item => {
+            return [item.Lon, item.Lat, 0.05];
+        });
+        this.heatLayer.setData(heatMapData);
+    }
+
+    filtByHourTime(from, to) {
+        this.data = [];
+
+        for (let item of this.originalData) {
+            let hour = item.date.getHours();
+            if (hour >= from && hour <= to) {
+                this.data.push(item);
+            }
+        }
+
+        this.d3Layer.redraw();
+    }
+
+    // only can be called by other class
     update(data) {
+        this.originalData = data;
         this.data = data;
         this.d3Layer.redraw();
     }
