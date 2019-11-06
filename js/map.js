@@ -4,6 +4,8 @@ class GeoMap {
     }
 
     init() {
+        this.data = [];
+
         const MAP_CONTAINER = "map-container";
         d3.select("body").append("div")
             .attr("id", MAP_CONTAINER)
@@ -16,7 +18,7 @@ class GeoMap {
             zoom: 8,
             minZoom: 8, // set map's min zoom to 14
             maxZoom: 18,
-            centerCross: true,
+            centerCross: false,
             baseLayer: new maptalks.TileLayer('base', {
                 urlTemplate: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
                 subdomains: ['a', 'b', 'c', 'd'],
@@ -49,20 +51,20 @@ class GeoMap {
         map.getLayer('v')
             .addGeometry(nyBoundry);
 
-        map.getLayer('v')
-            .addGeometry(
-                new maptalks.Polygon(extent.toArray(), {
-                    symbol: { 'polygonOpacity': 0, 'lineWidth': 5 }
-                })
-            );
+        // map.getLayer('v')
+        //     .addGeometry(
+        //         new maptalks.Polygon(extent.toArray(), {
+        //             symbol: { 'polygonOpacity': 0, 'lineWidth': 5 }
+        //         })
+        //     );
 
-        var d3Layer = new maptalks.D3Layer('d3', { 'renderer': 'dom', 'hideWhenZooming': false });
+        this.d3Layer = new maptalks.D3Layer('d3', { 'renderer': 'dom', 'hideWhenZooming': false });
 
-        d3Layer.prepareToDraw = function (ctx, projection) {
+        this.d3Layer.prepareToDraw = function (ctx, projection) {
             //preparation
         };
 
-        d3Layer.draw = function (ctx, projection) {
+        this.d3Layer.draw = (ctx, projection)=>{
             //drawing the layer
             console.log("drawing");
             console.log(projection([-73, 40.769])[0]);
@@ -71,41 +73,52 @@ class GeoMap {
             var boxInfo = svg.attr("viewBox").split(" ");
             var scale = +boxInfo[2] / 800;
 
-            svg.html("");
-            svg.append("circle")
-                .attr("cx", projection([-73, 40.769])[0]
+            let circles = svg.selectAll("circle").data(this.data);
+
+            // svg.html("");
+            circles
+                .join("circle")
+                .attr("cx", d => {
+                    return projection([d.Lon, d.Lat])[0];
+                })
+                .attr("cy", d => {
+                    return projection([d.Lon, d.Lat])[1];
+                }
                 )
-                .attr("cy", projection([-73, 40.769])[1]
-                )
-                .attr("r", 25.0 * scale)
+                .attr("r", 5.0 * scale)
                 .style("fill", "steelblue")
                 .style("opacity", 0.8);
         };
 
-        map.addLayer(d3Layer);
+        map.addLayer(this.d3Layer);
 
-        map.on('moving moveend', function (e) {
-            d3Layer.redraw();
+        map.on('moving moveend', (e)=>{
+            this.d3Layer.redraw();
             console.log("redraw");
         });
 
-        map.on('zooming zoomend', function (e) {
-            d3Layer.redraw();
+        map.on('zooming zoomend', (e)=>{
+            this.d3Layer.redraw();
             console.log("redraw");
         });
 
-        map.on('pitch', function (e) {
-            d3Layer.redraw();
+        map.on('pitch', (e)=>{
+            this.d3Layer.redraw();
             console.log("redraw");
         });
 
-        map.on('rotate', function (e) {
-            d3Layer.redraw();
+        map.on('rotate', (e)=>{
+            this.d3Layer.redraw();
             console.log("redraw");
         });
 
         // try heat map
         // var data = [[-73.9549, 40.769, 0.3], [-73.9549, 40.769, 0.4], [-63.9549, 30.769, 0.4], [-86.9549, 40.769, 1.2], [-72.9549, 41.769, 0.8], [-71.9549, 40.769, 0.1]];
         // var heatLayer = new maptalks.HeatLayer('heat', data).addTo(map);
+    }
+
+    update(data) {
+        this.data = data;
+        this.d3Layer.redraw();
     }
 }

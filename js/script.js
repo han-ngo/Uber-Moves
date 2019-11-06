@@ -23,9 +23,12 @@
 // });
 
 d3.json("data/newyork.geojson").then(nyGeoJson=>{
-    AppManager.getInstance().NewYorkGeoJson = nyGeoJson;
-    let map = new GeoMap();
-    AppManager.getInstance().setMap(map);
+    d3.csv("data/test.csv").then(uberData=>{
+        AppManager.getInstance().NewYorkGeoJson = nyGeoJson;
+        let map = new GeoMap();
+        AppManager.getInstance().setMap(map);
+        map.update(uberData);
+    });
 })
 
 
