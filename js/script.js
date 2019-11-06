@@ -36,6 +36,11 @@ d3.json("data/newyork.geojson").then(nyGeoJson=>{
         let map = new GeoMap();
         AppManager.getInstance().setMap(map);
         map.update(uberData);
+
+        // test component
+        let compContainer = d3.select("body").append("div")
+            .attr("id", 'testcomponent');
+        let comp = new BrushSlider(compContainer, new BrushConfig());
     });
 })
 
