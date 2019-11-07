@@ -17,6 +17,7 @@ class BrushSlider {
 
     // callback
     onChange = null;
+    onClear = null;
 
     init() {
         // append svg 
@@ -83,6 +84,7 @@ class BrushSlider {
                 const brushSelection = d3.brushSelection(this);
                 if (brushSelection == null || !thresholdTest(brushSelection)) {
                     // recover
+                    that.callOnClear();
                 }
                 console.log("Brush End");
             })
@@ -91,11 +93,25 @@ class BrushSlider {
                 const brushSelection = d3.brushSelection(this);
                 if (brushSelection == null || !thresholdTest(brushSelection)) {
                     // recover
+                    that.callOnClear();
                 }
                 else {
+                    that.callOnChange(that.valueScale.invert(brushSelection[0]), that.valueScale.invert(brushSelection[1]));
                 }
             });
 
         brushGroup.call(brush)
+    }
+
+    callOnChange(from, to) {
+        if (this.onChange != null) {
+            this.onChange(from, to);
+        }
+    }
+
+    callOnClear() {
+        if (this.onClear != null) {
+            this.onClear();
+        }
     }
 }

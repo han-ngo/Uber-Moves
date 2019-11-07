@@ -41,6 +41,12 @@ d3.json("data/newyork.geojson").then(nyGeoJson=>{
         let compContainer = d3.select("body").append("div")
             .attr("id", 'testcomponent');
         let comp = new BrushSlider(compContainer, new BrushConfig());
+        comp.onClear = ()=>{
+            map.filtByHourTime(0,24);
+        };
+        comp.onChange = (from, to)=>{
+            map.filtByHourTime(from, to);
+        };
     });
 })
 

@@ -180,12 +180,26 @@ class GeoMap {
 
         for (let item of this.originalData) {
             let hour = item.date.getHours();
-            if (hour >= from && hour <= to) {
+            let minute = item.date.getMinutes();
+
+            let fromHour = Math.floor(from);
+            let fromMin = (from - fromHour) * 60;
+
+            let toHour = Math.floor(to);
+            let toMin = (to - toHour) * 60;
+
+            if (hour >= fromHour && minute >= fromMin && hour <= toHour && minute <= toMin) 
+            {
                 this.data.push(item);
             }
         }
 
         this.d3Layer.redraw();
+        
+        if(this.heatLayerToggle)
+        {
+            this.renderHeatMap(this.data);
+        }
     }
 
     // only can be called by other class
