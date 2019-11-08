@@ -183,7 +183,19 @@ class GeoMap {
             let toHour = Math.floor(to);
             let toMin = (to - toHour) * 60;
 
-            if (hour >= fromHour && minute >= fromMin && hour <= toHour && minute <= toMin) 
+            if (
+                    (
+                        (hour == fromHour && minute >= fromMin) 
+                        || 
+                        hour > fromHour
+                    ) 
+                    && 
+                    (
+                        (hour == toHour && minute <= toMin)
+                        ||
+                        hour < toHour
+                    )
+                ) 
             {
                 this.data.push(item);
             }
