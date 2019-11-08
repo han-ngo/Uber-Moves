@@ -12,7 +12,6 @@ class GeoMap {
             .style("width", "800px")
             .style("height", "600px");
 
-        //40.769,
         var map = new maptalks.Map(MAP_CONTAINER, {
             center: [-73.3, 40.769],
             zoom: 8,
@@ -51,13 +50,6 @@ class GeoMap {
         map.getLayer('v')
             .addGeometry(nyBoundry);
 
-        // map.getLayer('v')
-        //     .addGeometry(
-        //         new maptalks.Polygon(extent.toArray(), {
-        //             symbol: { 'polygonOpacity': 0, 'lineWidth': 5 }
-        //         })
-        //     );
-
         this.d3Layer = new maptalks.D3Layer('d3', { 'renderer': 'dom', 'hideWhenZooming': false });
 
         this.d3Layer.prepareToDraw = function (ctx, projection) {
@@ -67,7 +59,6 @@ class GeoMap {
         this.d3Layer.draw = (ctx, projection) => {
             //drawing the layer
             console.log("drawing");
-            console.log(projection([-73, 40.769])[0]);
 
             let svg = d3.select(ctx);
             var boxInfo = svg.attr("viewBox").split(" ");
