@@ -128,16 +128,11 @@ class GeoMap {
             'vertical': true,
             'position': 'top-right',
             'items': [{
-                item: 'Heat Map Toggle',
+                item: 'Heat Map Mode',
                 click: () => {
                     this.toggleHeatLayer();
                 }
-            }, {
-                item: 'Test Time Filter',
-                click: () => {
-                    this.filtByHourTime(12, 13);
-                }
-            }]
+            },]
         })
             .addTo(map);
     }
