@@ -3,6 +3,9 @@ class GeoMap {
         this.init();
     }
 
+    // 0 d3 layer, 1 heat layer, 2 cluster
+    mode = 0;
+
     init() {
         this.data = [];
 
@@ -27,10 +30,99 @@ class GeoMap {
                 new maptalks.VectorLayer('v')
             ]
         });
+
+        this.map = map;
+
         d3.select(".maptalks-attribution").style("opacity", 0);
 
         var extent = map.getExtent();
         map.setMaxExtent(extent);
+
+        this.InitMarkerClusterLayer();
+
+        this.InitGeoJsonPolygon();
+
+        this.InitD3Layer();
+
+        this.InitHeatLayer();
+
+        // toolbar for debugging
+        // vertical one on top right
+        new maptalks.control.Toolbar({
+            'vertical': true,
+            'position': 'top-right',
+            'items': [{
+                item: 'Map Mode',
+                click: function () {  
+                },
+                children: [{
+                    item: 'Cluster',
+                    click: ()=> 
+                    { 
+                        this.mode = 2;
+                        this.updateMapMode();
+                    }
+                },{
+                    item: 'Circle',
+                    click: ()=> 
+                    { 
+                        this.mode = 0;
+                        this.updateMapMode();
+                    }
+                }, {
+                    item: 'HeatMap',
+                    click: ()=> 
+                    { 
+                        this.mode = 1; 
+                        this.updateMapMode();
+                    }
+                }]
+            },]
+        })
+            .addTo(map);
+
+        this.mode = 2;
+        this.updateMapMode();
+    }
+
+    InitMarkerClusterLayer() {
+        var map = this.map;
+
+        this.clusterMarkers = [];
+
+        let OnClick = () => {
+
+        };
+
+        for (var i = 0; i < this.data.length; i++) {
+            var a = this.data[i];
+            this.clusterMarkers.push(new maptalks.Marker([a.Lon, a.Lat]).on('mousedown', OnClick));
+        }
+
+        this.clusterLayer = new maptalks.ClusterLayer('cluster', this.clusterMarkers, {
+            'noClusterWithOneMarker': false,
+            'maxClusterZoom': 18,
+            //"count" is an internal variable: marker count in the cluster.
+            'symbol': {
+                'markerType': 'ellipse',
+                'markerFill': { property: 'count', type: 'interval', stops: [[0, 'rgb(135, 196, 240)'], [9, '#1bbc9b'], [99, 'rgb(216, 115, 149)']] },
+                'markerFillOpacity': 0.7,
+                'markerLineOpacity': 1,
+                'markerLineWidth': 3,
+                'markerLineColor': '#fff',
+                'markerWidth': { property: 'count', type: 'interval', stops: [[0, 40], [9, 60], [99, 80]] },
+                'markerHeight': { property: 'count', type: 'interval', stops: [[0, 40], [9, 60], [99, 80]] }
+            },
+            'drawClusterText': true,
+            'geometryEvents': true,
+            'single': true
+        });
+
+        map.addLayer(this.clusterLayer);
+    }
+
+    InitGeoJsonPolygon() {
+        var map = this.map;
 
         var nyBoundry = maptalks.GeoJSON.toGeometry(AppManager.getInstance().NewYorkGeoJson.features);
         nyBoundry.forEach(element => {
@@ -49,6 +141,10 @@ class GeoMap {
         });
         map.getLayer('v')
             .addGeometry(nyBoundry);
+    }
+
+    InitD3Layer() {
+        var map = this.map;
 
         this.d3Layer = new maptalks.D3Layer('d3', { 'renderer': 'dom', 'hideWhenZooming': false });
 
@@ -66,7 +162,7 @@ class GeoMap {
 
             this.circles = svg.selectAll("circle").data(this.data);
 
-            let opacity = this.heatLayerToggle?0:0.8;
+            let opacity = this.mode == 0 ? 0.8 : 0;
 
             // svg.html("");
             this.circles = this.circles
@@ -86,79 +182,100 @@ class GeoMap {
         map.addLayer(this.d3Layer);
 
         map.on('moving moveend', (e) => {
+            if(this.mode != 0)
+            {
+                return;
+            }
             this.d3Layer.redraw();
             console.log("redraw");
         });
 
         map.on('zooming zoomend', (e) => {
+            if(this.mode != 0)
+            {
+                return;
+            }
             this.d3Layer.redraw();
             console.log("redraw");
         });
 
         map.on('pitch', (e) => {
+            if(this.mode != 0)
+            {
+                return;
+            }
             this.d3Layer.redraw();
             console.log("redraw");
         });
 
         map.on('rotate', (e) => {
+            if(this.mode != 0)
+            {
+                return;
+            }
             this.d3Layer.redraw();
             console.log("redraw");
         });
-
-        // try heat map
-        // var data = [[-73.9549, 40.769, 0.3], [-73.9549, 40.769, 0.4], [-63.9549, 30.769, 0.4], [-86.9549, 40.769, 1.2], [-72.9549, 41.769, 0.8], [-71.9549, 40.769, 0.1]];
-        this.heatLayer = new maptalks.HeatLayer('heat', []).addTo(map);
-        this.heatLayer.config({
-            'radius' : 15,
-            'blur' : 4,
-            'gradient' : {0.4: 'blue', 0.65: 'lime', 1: 'red'}
-        });
-        // toolbar for debugging
-        // vertical one on top right
-        new maptalks.control.Toolbar({
-            'vertical': true,
-            'position': 'top-right',
-            'items': [{
-                item: 'Heat Map Mode',
-                click: () => {
-                    this.toggleHeatLayer();
-                }
-            },]
-        })
-            .addTo(map);
     }
 
-    heatLayerToggle = false;
+    InitHeatLayer() {
+        this.heatLayer = new maptalks.HeatLayer('heat', []).addTo(this.map);
+        this.heatLayer.config({
+            'radius': 15,
+            'blur': 4,
+            'gradient': { 0.4: 'blue', 0.65: 'lime', 1: 'red' }
+        });
+    }
 
-    toggleHeatLayer(){
-        this.heatLayerToggle = !this.heatLayerToggle;
-        if(this.heatLayerToggle)
-        {
+    updateMapMode() {
+        if (this.mode == 1) {
             this.renderHeatMap(this.data);
             this.hideCircles();
+            this.clusterLayer.hide();
         }
-        else
-        {
+        else if(this.mode == 0) {
             this.heatLayer.clear();
             this.showCircles();
+            this.clusterLayer.hide();
+        }
+        // cluster
+        else{
+            this.hideCircles();
+            this.heatLayer.clear();
+            this.clusterLayer.show();
         }
     }
 
-    hideCircles()
-    {
+    hideCircles() {
         this.circles.style("opacity", 0);
     }
 
-    showCircles()
-    {
+    showCircles() {
         this.circles.style("opacity", 0.8);
     }
 
-    renderHeatMap(data){
+    renderHeatMap(data) {
         let heatMapData = data.map(item => {
             return [item.Lon, item.Lat, 0.05];
         });
         this.heatLayer.setData(heatMapData);
+    }
+
+    renderClusterLayer(data) {
+        // getGeometries
+        // removeGeometry
+
+        let marks = this.clusterLayer.getGeometries();
+        this.clusterLayer.removeGeometry(marks);
+
+        let newMarks = [];
+
+        for (var i = 0; i < data.length; i++) {
+            var a = data[i];
+            newMarks.push(new maptalks.Marker([a.Lon, a.Lat]).on('mousedown', null));
+        }
+
+        this.clusterLayer.addGeometry(newMarks);
     }
 
     filtByHourTime(from, to) {
@@ -175,28 +292,33 @@ class GeoMap {
             let toMin = (to - toHour) * 60;
 
             if (
-                    (
-                        (hour == fromHour && minute >= fromMin) 
-                        || 
-                        hour > fromHour
-                    ) 
-                    && 
-                    (
-                        (hour == toHour && minute <= toMin)
-                        ||
-                        hour < toHour
-                    )
-                ) 
-            {
+                (
+                    (hour == fromHour && minute >= fromMin)
+                    ||
+                    hour > fromHour
+                )
+                &&
+                (
+                    (hour == toHour && minute <= toMin)
+                    ||
+                    hour < toHour
+                )
+            ) {
                 this.data.push(item);
             }
         }
 
-        this.d3Layer.redraw();
-        
-        if(this.heatLayerToggle)
+        if(this.mode == 0)
+        {
+            this.d3Layer.redraw();
+        }
+        if (this.mode == 1) 
         {
             this.renderHeatMap(this.data);
+        }
+        if(this.mode == 2)
+        {
+            this.renderClusterLayer(this.data);
         }
     }
 
@@ -205,5 +327,7 @@ class GeoMap {
         this.originalData = data;
         this.data = data;
         this.d3Layer.redraw();
+
+        this.renderClusterLayer(data);
     }
 }
