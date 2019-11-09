@@ -235,7 +235,8 @@ class GeoMap {
         }
         else if(this.mode == 0) {
             this.heatLayer.clear();
-            this.showCircles();
+            // this.showCircles();
+            this.d3Layer.redraw();
             this.clusterLayer.hide();
         }
         // cluster
