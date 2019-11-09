@@ -348,7 +348,6 @@ class GeoMap {
                 )
             ) {
                 this.data.push(item);
-                console.log(item.date.getDay());
             }
         }
 
