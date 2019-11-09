@@ -327,7 +327,6 @@ class GeoMap {
         this.data = [];
         
         for (let item of this.originalData) {
-            //console.log(item.date.getDay());
             let day = item.date.getDay();
             
             let fromDay = Math.floor(from);
@@ -348,7 +347,6 @@ class GeoMap {
                 )
             ) {
                 this.data.push(item);
-                console.log(item.date.getDay());
             }
         }
 
