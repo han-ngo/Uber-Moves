@@ -1,25 +1,28 @@
 //Config Args : width height
 class BrushConfig {
-    constructor(width = 400, height = 50, borderLeft = 10, borderRight = 10) {
+    constructor(width = 400, height = 50, borderLeft = 10, borderRight = 10, valueMin = 0, valueMax = 24, segment = 24) {
         this.width = width;
         this.height = height;
         this.borderLeft = borderLeft;
         this.borderRight = borderRight;
+        this.valueMin = valueMin;
+        this.valueMax = valueMax;
+        this.segment = segment;
     }
 }
 class BrushSlider {
-    constructor(domContainer, head, tail, config) {
+    constructor(domContainer, config) {
         this.container = domContainer;
         this.config = config;
 
-        this.init(head, tail);
+        this.init();
     }
 
     // callback
     onChange = null;
     onClear = null;
 
-    init(head, tail) {
+    init() {
         // append svg 
         this.svg = this.container
             .append('svg');
@@ -28,7 +31,7 @@ class BrushSlider {
             .attr('height', this.config.height);
 
         // time from 0 to 24, map it to boder left to width - border right
-        this.setValueScale(head, tail, tail);
+        this.setValueScale(this.config.valueMin, this.config.valueMax, this.config.segment);
 
         let axisGroup = this.svg
             .append('g');

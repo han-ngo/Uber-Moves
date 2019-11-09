@@ -51,8 +51,8 @@ d3.json("data/newyork.geojson").then(nyGeoJson=>{
         // date slider
         let dateSliderContainer = d3.select("body").append("div")
             .attr("id", 'dateSlider');
-        // 0 = sunday, 6 = saturday
-        let dateSlider = new BrushSlider(dateSliderContainer, 1, 7, new BrushConfig());
+        // from 1 = sunday to 7 = saturday
+        let dateSlider = new BrushSlider(dateSliderContainer, new BrushConfig(400, 50, 10, 10, 1, 7, 7));
         dateSlider.onClear = () => {
             map.filtByWeekDay(0, 6);
         };
