@@ -8,18 +8,18 @@ class BrushConfig {
     }
 }
 class BrushSlider {
-    constructor(domContainer, config) {
+    constructor(domContainer, head, tail, config) {
         this.container = domContainer;
         this.config = config;
 
-        this.init();
+        this.init(head, tail);
     }
 
     // callback
     onChange = null;
     onClear = null;
 
-    init() {
+    init(head, tail) {
         // append svg 
         this.svg = this.container
             .append('svg');
@@ -28,7 +28,7 @@ class BrushSlider {
             .attr('height', this.config.height);
 
         // time from 0 to 24, map it to boder left to width - border right
-        this.setValueScale(0, 24, 24);
+        this.setValueScale(head, tail, tail);
 
         let axisGroup = this.svg
             .append('g');

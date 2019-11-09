@@ -323,6 +323,46 @@ class GeoMap {
         }
     }
 
+    filtByWeekDay(from, to) {
+        this.data = [];
+        
+        for (let item of this.originalData) {
+            //console.log(item.date.getDay());
+            let day = item.date.getDay();
+            
+            let fromDay = Math.floor(from);
+
+            let toDay = Math.floor(to);
+
+            if (
+                (
+                    (day == fromDay)
+                    ||
+                    day > fromDay
+                )
+                &&
+                (
+                    (day == toDay)
+                    ||
+                    day < toDay
+                )
+            ) {
+                this.data.push(item);
+                console.log(item.date.getDay());
+            }
+        }
+
+        if (this.mode == 0) {
+            this.d3Layer.redraw();
+        }
+        if (this.mode == 1) {
+            this.renderHeatMap(this.data);
+        }
+        if (this.mode == 2) {
+            this.renderClusterLayer(this.data);
+        }
+    }
+
     // only can be called by other class
     update(data) {
         this.originalData = data;

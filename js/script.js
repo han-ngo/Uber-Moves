@@ -37,15 +37,27 @@ d3.json("data/newyork.geojson").then(nyGeoJson=>{
         AppManager.getInstance().setMap(map);
         map.update(uberData);
 
-        // test component
-        let compContainer = d3.select("body").append("div")
-            .attr("id", 'testcomponent');
-        let comp = new BrushSlider(compContainer, new BrushConfig());
-        comp.onClear = ()=>{
+        // hours slider
+        let hourSliderContainer = d3.select("body").append("div")
+            .attr("id", 'hourSlider');
+        let hourSlider = new BrushSlider(hourSliderContainer, 0, 24, new BrushConfig());
+        hourSlider.onClear = ()=>{
             map.filtByHourTime(0,24);
         };
-        comp.onChange = (from, to)=>{
+        hourSlider.onChange = (from, to)=>{
             map.filtByHourTime(from, to);
+        };
+
+        // date slider
+        let dateSliderContainer = d3.select("body").append("div")
+            .attr("id", 'dateSlider');
+        // 0 = sunday, 6 = saturday
+        let dateSlider = new BrushSlider(dateSliderContainer, 1, 7, new BrushConfig());
+        dateSlider.onClear = () => {
+            map.filtByWeekDay(0, 6);
+        };
+        dateSlider.onChange = (from, to) => {
+            map.filtByWeekDay(from, to);
         };
     });
 })
