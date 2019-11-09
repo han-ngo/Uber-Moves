@@ -40,7 +40,7 @@ d3.json("data/newyork.geojson").then(nyGeoJson=>{
         // hours slider
         let hourSliderContainer = d3.select("body").append("div")
             .attr("id", 'hourSlider');
-        let hourSlider = new BrushSlider(hourSliderContainer, 0, 24, new BrushConfig());
+        let hourSlider = new BrushSlider(hourSliderContainer, new BrushConfig());
         hourSlider.onClear = ()=>{
             map.filtByHourTime(0,24);
         };
