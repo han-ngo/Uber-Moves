@@ -25,9 +25,7 @@
 d3.json("data/newyork.geojson").then(nyGeoJson=>{
     d3.csv("data/processed_data.csv").then(uberData=>{
 
-        let bar =new Bars(uberData);
-        bar.createBars();
-
+   
 
         // processing, convert date string like "4/1/2014 0:11:00" to Javascript Date class
         for(let item of uberData)
@@ -64,6 +62,10 @@ d3.json("data/newyork.geojson").then(nyGeoJson=>{
         dateSlider.onChange = (from, to) => {
             map.filtByWeekDay(from, to);
         };
+
+      
+        let bar =new Bars(uberData);
+        bar.createBars();
     });
     
 })

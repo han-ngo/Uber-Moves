@@ -11,7 +11,7 @@ class Bars {
     createBars() {
         // set the ranges
         console.log(this.data);
-        let div = d3.select("body").append('div');
+        let div = d3.select("body").append('div').attr("id","bars");
 
         let svg_DOW_bars = div.append('svg').attr('width',400).attr('height',400).attr("id","svg1");
         let svg_Pickup_byHours = div.append('svg').attr('width',400).attr('height',400).attr("id","svg2");;
