@@ -5,13 +5,14 @@ class Bars {
     constructor(data) {
  
         this.data = data;
+        this.originalData = data;
+
 
     }
 
     createBars() {
         // set the ranges
-        console.log(this.data);
-        let div = d3.select("body").append('div').attr("id","bars");
+         let div = d3.select("body").append('div').attr("id","bars");
 
         let svg_DOW_bars = div.append('svg').attr('width',400).attr('height',400).attr("id","svg1");
         let svg_Pickup_byHours = div.append('svg').attr('width',400).attr('height',400).attr("id","svg2");;
@@ -30,8 +31,7 @@ class Bars {
        {day:"Sunday"}
         ];
 
-        console.log(height)
-        // Create scale
+         // Create scale
         var xScale = d3.scaleBand()
         .domain(dow.map(function(d){ return d.day}))
         .range([0, width*0.85])
@@ -60,8 +60,7 @@ class Bars {
         //X-SCALE -SVG2 - HOURLY
        
  
-         console.log(height)
-         // Create scale
+          // Create scale
          var xScale = d3.scaleLinear()
          .domain([0,23])
          .range([0, width*0.85])
@@ -122,8 +121,7 @@ class Bars {
            
             var clear =[];
             svg_DOW_bars.data(clear).exit().remove();
-            console.log(dow_data)
-    
+     
             
             //add bars
             
@@ -134,8 +132,7 @@ class Bars {
             
             svg_DOW_bars.data(dow_data).enter().append("rect")
             .attr('x', function(d,i) {
-                console.log(d)
-                return i*50 + 50;
+                 return i*50 + 50;
                }
             
             ).attr('y', function(d){return 300-pickUpScale(d.value)}).attr('width',40).attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green")
@@ -163,8 +160,7 @@ class Bars {
            
             var clear =[];
             svg_Pickup_byHours.data(clear).exit().remove();
-            console.log(dow_data)
-    
+     
             
             //add bars
             
@@ -180,12 +176,73 @@ class Bars {
             
             gBars.data(dow_data).enter().append("rect")
             .attr('x', function(d,i) {
-                console.log(d)
-                return i*14 + 11;
+                 return i*14 + 11;
                }
             
             ).attr('y', function(d){return 300-pickUpScale(d.value)}).attr('width',10).attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green")
            
+    }
+    filtByHourTime(from, to) {
+        this.data = [];
+
+        for (let item of this.originalData) {
+            let hour = item.date.getHours();
+            let minute = item.date.getMinutes();
+
+            let fromHour = Math.floor(from);
+            let fromMin = (from - fromHour) * 60;
+
+            let toHour = Math.floor(to);
+            let toMin = (to - toHour) * 60;
+
+            if (
+                (
+                    (hour == fromHour && minute >= fromMin)
+                    ||
+                    hour > fromHour
+                )
+                &&
+                (
+                    (hour == toHour && minute <= toMin)
+                    ||
+                    hour < toHour
+                )
+            ) {
+                this.data.push(item);
+            }
+        }
+
+        this.bars_hourly();
+    }
+
+    filtByWeekDay(from, to) {
+        this.data = [];
+        
+        for (let item of this.originalData) {
+            let day = item.date.getDay();
+            
+            let fromDay = Math.floor(from);
+
+            let toDay = Math.floor(to);
+
+            if (
+                (
+                    (day == fromDay)
+                    ||
+                    day > fromDay
+                )
+                &&
+                (
+                    (day == toDay)
+                    ||
+                    day < toDay
+                )
+            ) {
+                this.data.push(item);
+            }
+        }
+
+       this.bars_dow();
     }
 
 }
