@@ -39,6 +39,10 @@ d3.json("data/newyork.geojson").then(nyGeoJson=>{
         let map = new GeoMap();
         AppManager.getInstance().setMap(map);
         map.update(uberData);
+        
+        map.onSelection((data)=>{
+            console.log(data);
+        });
 
         // bar charts
         

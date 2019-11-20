@@ -38,13 +38,13 @@ class GeoMap {
         var extent = map.getExtent();
         map.setMaxExtent(extent);
 
-        this.InitMarkerClusterLayer();
-
         this.InitGeoJsonPolygon();
 
         this.InitD3Layer();
 
         this.InitHeatLayer();
+
+        this.InitMarkerClusterLayer();
 
         // toolbar for debugging
         // vertical one on top right
@@ -90,10 +90,6 @@ class GeoMap {
 
         this.clusterMarkers = [];
 
-        let OnClick = () => {
-
-        };
-
         for (var i = 0; i < this.data.length; i++) {
             var a = this.data[i];
             this.clusterMarkers.push(new maptalks.Marker([a.Lon, a.Lat]).on('mousedown', OnClick));
@@ -119,6 +115,24 @@ class GeoMap {
         });
 
         map.addLayer(this.clusterLayer);
+        
+        map.on('click', (e)=>{
+            let target = this.clusterLayer.identify(e.coordinate);
+            let callbackResults = [];
+            for(let child of target.children)
+            {
+                callbackResults.push(this.data[child.data_index]);
+            }
+
+            for(let callback of this.selectionCallbacks)
+            {
+                callback(callbackResults);
+            }
+        });
+
+        function OnClick(e){
+            console.log(e.target);
+        };
     }
 
     InitGeoJsonPolygon() {
@@ -273,7 +287,9 @@ class GeoMap {
 
         for (var i = 0; i < data.length; i++) {
             var a = data[i];
-            newMarks.push(new maptalks.Marker([a.Lon, a.Lat]).on('mousedown', null));
+            let marker = new maptalks.Marker([a.Lon, a.Lat]).on('mousedown', null);
+            marker.data_index = i;
+            newMarks.push(marker);
         }
 
         this.clusterLayer.addGeometry(newMarks);
@@ -369,4 +385,16 @@ class GeoMap {
 
         this.renderClusterLayer(data);
     }
+
+    onSelection(callback)
+    {
+        this.selectionCallbacks.push(callback);
+    }
+
+    removeAllSelectionCallback()
+    {
+        this.selectionCallbacks.clear();
+    }
+
+    selectionCallbacks = [];
 }
