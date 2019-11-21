@@ -16,7 +16,7 @@ class Bars {
 
         let svg_DOW_bars = div.append('svg').attr('width',400).attr('height',400).attr("id","svg1");
         let svg_Pickup_byHours = div.append('svg').attr('width',400).attr('height',400).attr("id","svg2");;
-        let svg_Pickup_areas = div.append('svg').attr('width',400).attr('height',400).attr("id","svg3");;
+        let svg_Dow_Hours = div.append('svg').attr('width',400).attr('height',400).attr("id","svg3");;
 
         let width = parseInt(svg_DOW_bars.style("width"));
         let height = parseInt(svg_DOW_bars.style("height"));
@@ -85,7 +85,36 @@ class Bars {
          .call(y_axis);
 
 
+        //X-SCALE -SVG3 - DOW-HOURLY
+       
  
+          // Create scale
+          var xScale = d3.scaleLinear()
+          .domain([0,23])
+          .range([0, width*0.85])
+          // Add scales to axis
+          var x_axis = d3.axisBottom()
+          .scale(xScale).ticks(23);
+          //Append group and insert axis
+          svg_Dow_Hours.append("g")
+          .attr("transform", "translate(55," + 300 + ")")
+          .call(x_axis);
+  
+         //Y-SCALE-SVG3 - DOW-HOURLY
+          var yScale = d3.scaleLinear()
+          .domain([0, this.data.length])
+          .range([height-100,50]);
+          // Add scales to axis
+          var y_axis = d3.axisLeft()
+          .scale(yScale);
+          //Append group and insert axis
+          svg_Dow_Hours.append("g")
+          .attr("transform", "translate(50," + 0 + ")")
+          .call(y_axis);
+ 
+ 
+
+
 
         this.updateBars();
     }
@@ -96,7 +125,7 @@ class Bars {
         
         this.bars_hourly();
 
-        
+        this.dow_hourly();
 
     }
 
@@ -126,13 +155,14 @@ class Bars {
             //add bars
             
             var pickUpScale = d3.scaleLinear()
-            .domain([0, this.data.length])
+            .domain([0, this.originalData.length])
             .range([50, 400]);
     
             
             svg_DOW_bars.data(dow_data).enter().append("rect")
             .attr('x', function(d,i) {
-                 return i*50 + 50;
+                return d.key*50;
+                //return i*50 + 50;
                }
             
             ).attr('y', function(d){return 300-pickUpScale(d.value)}).attr('width',40).attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green")
@@ -142,7 +172,8 @@ class Bars {
     bars_hourly()
     {
         let svg_Pickup_byHours = d3.selectAll('body').selectAll('div').select('#svg2').selectAll('rect');
-
+        console.log("in bar hourly");
+        console.log(this.data);
         // check total pickups per day of week - returns 7 days with total pickups per each day
             var nested_data = d3.nest()
             .key(function(d) { return d.Hour_of_Day; })
@@ -165,7 +196,7 @@ class Bars {
             //add bars
             
             var pickUpScale = d3.scaleLinear()
-            .domain([0, this.data.length])
+            .domain([0, this.originalData.length])
             .range([50, 400]);
     
             
@@ -176,12 +207,82 @@ class Bars {
             
             gBars.data(dow_data).enter().append("rect")
             .attr('x', function(d,i) {
-                 return i*14 + 11;
+                
+                 return d.key*15 + 5;
                }
             
             ).attr('y', function(d){return 300-pickUpScale(d.value)}).attr('width',10).attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green")
            
     }
+
+//Dow and Hours - SVG3
+dow_hourly()
+{
+    let svg_Dow_Hours = d3.selectAll('body').selectAll('div').select('#svg3').selectAll('line');
+    
+    // check total pickups per day of week - returns 7 days with total pickups per each day
+        var nested_data = d3.nest()
+        .key(function(d) { return d.Dow; })
+        .key(function(d) { return d.Hour_of_Day; })
+        .rollup(function(ids) {
+            return ids.length; 
+        })
+        .entries(this.data);
+
+        var dow_data= nested_data;
+        dow_data.sort(function(x, y){
+            return d3.ascending(parseInt(x.key), parseInt(y.key));
+         })
+        
+         console.log(dow_data);
+        //clear bars
+       
+        var clear =[];
+        svg_Dow_Hours.data(clear).exit().remove();
+ 
+        
+        //add bars
+        
+        var pickUpScale = d3.scaleLinear()
+        .domain([0, this.originalData.length])
+        .range([50, 400]);
+
+        
+        let g = d3.selectAll('body').selectAll('div').select('#svg3').append('g').attr("transform","translate(42,0)").attr("id","gline3");
+
+        let gBars = d3.selectAll('body').selectAll('div').select('#svg3').selectAll("g").select('#gline3');
+
+        let lineGenerator = d3
+        .line()
+        .x((d, i) =>  d.key*15 + 5)
+        .y(d => d.value *20);
+
+     //   for(var i=0;i<dow_data.length;i++)
+        {
+            var data = dow_data[0].values;
+            console.log(data);
+
+let Xpath= d3.selectAll("#svg3").selectAll("g").select("#gline3").selectAll("path").attr("opacity",1).transition().duration(2000);
+let newXpath = Xpath.attr("d", lineGenerator(data));
+
+
+    //        gBars.data(data).enter().append("line")
+      //      .attr('x', function(d,i) {
+             //   console.log(d.key);
+               
+        //      return d.key*15 + 5;
+         //   }
+            
+           // )
+      //      .attr('y', function(d){return 300-pickUpScale(d.value)})
+        //    .attr('width',10)
+          //  .attr('height',function(d){return pickUpScale(d.value)})
+          //  .attr("fill","green")
+        }
+}
+
+
+
     filtByHourTime(from, to) {
         this.data = [];
 
