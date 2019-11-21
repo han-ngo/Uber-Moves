@@ -117,7 +117,15 @@ class GeoMap {
         map.addLayer(this.clusterLayer);
         
         map.on('click', (e)=>{
+            if(this.mode != 2)
+            {
+                return;
+            }
             let target = this.clusterLayer.identify(e.coordinate);
+            if(target.children == null)
+            {
+                return;
+            }
             let callbackResults = [];
             for(let child of target.children)
             {
@@ -168,7 +176,6 @@ class GeoMap {
 
         this.d3Layer.draw = (ctx, projection) => {
             //drawing the layer
-            console.log("drawing");
 
             let svg = d3.select(ctx);
             var boxInfo = svg.attr("viewBox").split(" ");
@@ -201,7 +208,6 @@ class GeoMap {
                 return;
             }
             this.d3Layer.redraw();
-            console.log("redraw");
         });
 
         map.on('zooming zoomend', (e) => {
@@ -210,7 +216,6 @@ class GeoMap {
                 return;
             }
             this.d3Layer.redraw();
-            console.log("redraw");
         });
 
         map.on('pitch', (e) => {
@@ -219,7 +224,6 @@ class GeoMap {
                 return;
             }
             this.d3Layer.redraw();
-            console.log("redraw");
         });
 
         map.on('rotate', (e) => {
@@ -228,7 +232,6 @@ class GeoMap {
                 return;
             }
             this.d3Layer.redraw();
-            console.log("redraw");
         });
     }
 
