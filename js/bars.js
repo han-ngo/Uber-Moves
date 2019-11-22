@@ -234,7 +234,14 @@ dow_hourly()
             return d3.ascending(parseInt(x.key), parseInt(y.key));
          })
         
-         console.log(dow_data);
+         //get max of all pickup count values per dow_hourly
+         let max = d3.max(dow_data, function(d,i) 
+                        {
+                            //console.log(d3.max(d.values,d=>d.value));
+                            for(var j=0;j<d.values.length;j++)
+                                {return d3.max(d.values,d=>d.value)}
+                        });
+                    
         //clear bars
        
         var clear =[];
@@ -242,34 +249,40 @@ dow_hourly()
  
         
         //add bars
+        console.log(max);
         
         var pickUpScale = d3.scaleLinear()
-        .domain([0, this.originalData.length])
+        .domain([0, max])
         .range([50, 400]);
 
         
-        let g = d3.selectAll('body').selectAll('div').select('#svg3').append('g').attr("transform","translate(42,0)").attr("id","gline3");
+        let g = d3.selectAll('body').selectAll('div').select('#svg3').append('g').attr("transform","translate(0,0)").attr("id","gline3");
 
         let gBars = d3.selectAll('body').selectAll('div').select('#svg3').selectAll("g").select('#gline3');
 
         let lineGenerator = d3
         .line()
-        .x((d, i) =>  d.key*15 + 5)
-        .y(d => d.value *20);
+        .x((d, i) =>  d.key*14 + 50)
+        .y(d => 300-pickUpScale(d.value));
 
-     //   for(var i=0;i<dow_data.length;i++)
+        let color =["green","red","brown","orange","black","blue","yellow"];
+
+    for(var i=0;i<dow_data.length;i++)
         {
-            var data = dow_data[0].values;
+            var data = dow_data[i].values;
             console.log(data);
+            data.sort(function(x, y){
+                return d3.ascending(parseInt(x.key), parseInt(y.key));
+             })
 
-let Xpath= d3.selectAll("#svg3").selectAll("g").select("#gline3").selectAll("path").attr("opacity",1).transition().duration(2000);
-let newXpath = Xpath.attr("d", lineGenerator(data));
+let Xpath= d3.selectAll("#svg3").select("#gline3").append('path').attr("opacity",1)
+.attr("transform","translate(0,0)")
+//.attr("stroke", "#086fad")
+.attr("stroke-width", "0.5")
+.attr("fill", "none")
+.attr("stroke",color[i]);
 
-
-    //        gBars.data(data).enter().append("line")
-      //      .attr('x', function(d,i) {
-             //   console.log(d.key);
-               
+let newYpath = Xpath.attr("d", lineGenerator(data));
         //      return d.key*15 + 5;
          //   }
             
