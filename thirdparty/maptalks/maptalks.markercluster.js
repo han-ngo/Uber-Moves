@@ -318,7 +318,8 @@ ClusterLayer.registerRenderer('canvas', function (_maptalks$renderer$Ve) {
                 if (point.distanceTo(pt) <= markerWidth) {
                     return {
                         'center': map.getProjection().unproject(c.center.copy()),
-                        'children': c.children.slice(0)
+                        'children': c.children.slice(0),
+                        'cluster':c
                     };
                 }
             }
@@ -452,7 +453,24 @@ ClusterLayer.registerRenderer('canvas', function (_maptalks$renderer$Ve) {
         ctx.globalAlpha = opacity * op;
         if (sprite) {
             var pos = pt.add(sprite.offset)._sub(sprite.canvas.width / 2, sprite.canvas.height / 2);
+        
+            if(cluster["selected"])
+            {
+                cluster["selected"] = false;
+            
+                var radius = sprite.canvas.width * 0.5;
+
+                ctx.beginPath();
+                ctx.arc(pos.x + sprite.canvas.width * 0.5, pos.y + sprite.canvas.height * 0.5, radius, 0, 2 * Math.PI, false);
+                // ctx.fillStyle = 'green';
+                // ctx.fill();
+                ctx.lineWidth = 5;
+                ctx.strokeStyle = '#000000';
+                ctx.stroke();
+            }
+
             ctx.drawImage(sprite.canvas, pos.x, pos.y);
+            
         }
 
         if (this.layer.options['drawClusterText'] && cluster['textSize']) {

@@ -85,6 +85,10 @@ class GeoMap {
         this.updateMapMode();
     }
 
+    SetClusterNeedRedraw(){
+        this.clusterLayer._renderer._toRedraw = true;
+    }
+
     InitMarkerClusterLayer() {
         var map = this.map;
 
@@ -117,16 +121,34 @@ class GeoMap {
         map.addLayer(this.clusterLayer);
         
         map.on('click', (e)=>{
+            let callbackResults = [];
+
             if(this.mode != 2)
             {
+                for(let callback of this.selectionCallbacks)
+                {
+                    callback(callbackResults);
+                }
                 return;
             }
+
             let target = this.clusterLayer.identify(e.coordinate);
+            console.log("Click Cluster Bubble");
+            console.log(target);
+
+            this.SetClusterNeedRedraw()
+            
             if(target.children == null)
             {
+                for(let callback of this.selectionCallbacks)
+                {
+                    callback(callbackResults);
+                }
                 return;
             }
-            let callbackResults = [];
+            
+            target.cluster["selected"] = true;
+
             for(let child of target.children)
             {
                 callbackResults.push(this.data[child.data_index]);
@@ -136,6 +158,8 @@ class GeoMap {
             {
                 callback(callbackResults);
             }
+
+            
         });
 
         function OnClick(e){

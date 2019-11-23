@@ -23,7 +23,7 @@
 // });
 
 d3.json("data/newyork.geojson").then(nyGeoJson=>{
-    d3.csv("data/processed_data.csv").then(uberData=>{
+    d3.csv("data/data_with_district.csv").then(uberData=>{
 
    
 
@@ -40,9 +40,9 @@ d3.json("data/newyork.geojson").then(nyGeoJson=>{
         AppManager.getInstance().setMap(map);
         map.update(uberData);
         
-        map.onSelection((data)=>{
-            console.log(data);
-        });
+        // map.onSelection((data)=>{
+        //     console.log(data);
+        // });
 
         // bar charts
         
