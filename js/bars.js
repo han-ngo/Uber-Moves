@@ -6,7 +6,8 @@ class Bars {
  
         this.data = data;
         this.originalData = data;
-
+        this.height = 400;
+        this.width = 400;
 
     }
 
@@ -21,97 +22,12 @@ class Bars {
         let width = parseInt(svg_DOW_bars.style("width"));
         let height = parseInt(svg_DOW_bars.style("height"));
 
-    //X-SCALE -SVG1 - DOW
-       var dow = [{day:"Monday"},
-       {day:"Tuesday"},
-       {day:"Wednesday"},
-       {day:"Thursday"},
-       {day:"Friday"},
-       {day:"Saturday"},
-       {day:"Sunday"}
-        ];
+   
 
-         // Create scale
-        var xScale = d3.scaleBand()
-        .domain(dow.map(function(d){ return d.day}))
-        .range([0, width*0.85])
-        // Add scales to axis
-        var x_axis = d3.axisBottom()
-        .scale(xScale).ticks(7);
-        //Append group and insert axis
-        svg_DOW_bars.append("g")
-        .attr("transform", "translate(50," + 300 + ")")
-        .call(x_axis);
-
-    //Y-SCALE-SVG1 - DOW
-        var yScale = d3.scaleLinear()
-        .domain([0, this.data.length])
-        .range([height-100,50]);
-        // Add scales to axis
-        var y_axis = d3.axisLeft()
-        .scale(yScale);
-        //Append group and insert axis
-        svg_DOW_bars.append("g")
-        .attr("transform", "translate(50," + 0 + ")")
-        .call(y_axis);
-
-
-
-        //X-SCALE -SVG2 - HOURLY
        
- 
-          // Create scale
-         var xScale = d3.scaleLinear()
-         .domain([0,23])
-         .range([0, width*0.85])
-         // Add scales to axis
-         var x_axis = d3.axisBottom()
-         .scale(xScale).ticks(23);
-         //Append group and insert axis
-         svg_Pickup_byHours.append("g")
-         .attr("transform", "translate(55," + 300 + ")")
-         .call(x_axis);
- 
-        //Y-SCALE-SVG2 - HOURLY
-         var yScale = d3.scaleLinear()
-         .domain([0, this.data.length])
-         .range([height-100,50]);
-         // Add scales to axis
-         var y_axis = d3.axisLeft()
-         .scale(yScale);
-         //Append group and insert axis
-         svg_Pickup_byHours.append("g")
-         .attr("transform", "translate(50," + 0 + ")")
-         .call(y_axis);
 
 
-        //X-SCALE -SVG3 - DOW-HOURLY
        
- 
-          // Create scale
-          var xScale = d3.scaleLinear()
-          .domain([0,23])
-          .range([0, width*0.85])
-          // Add scales to axis
-          var x_axis = d3.axisBottom()
-          .scale(xScale).ticks(23);
-          //Append group and insert axis
-          svg_Dow_Hours.append("g")
-          .attr("transform", "translate(55," + 300 + ")")
-          .call(x_axis);
-  
-         //Y-SCALE-SVG3 - DOW-HOURLY
-          var yScale = d3.scaleLinear()
-          .domain([0, this.data.length])
-          .range([height-100,50]);
-          // Add scales to axis
-          var y_axis = d3.axisLeft()
-          .scale(yScale);
-          //Append group and insert axis
-          svg_Dow_Hours.append("g")
-          .attr("transform", "translate(50," + 0 + ")")
-          .call(y_axis);
- 
  
 
 
@@ -132,6 +48,42 @@ class Bars {
     bars_dow()
     {
         let svg_DOW_bars = d3.selectAll('body').selectAll('div').select('#svg1').selectAll('rect');
+
+        let svg_1 = d3.selectAll('body').selectAll('div').select('#svg1');
+
+         //X-SCALE -SVG1 - DOW
+       var dow = [{day:"Monday"},
+       {day:"Tuesday"},
+       {day:"Wednesday"},
+       {day:"Thursday"},
+       {day:"Friday"},
+       {day:"Saturday"},
+       {day:"Sunday"}
+        ];
+
+         // Create scale
+        var xScale = d3.scaleBand()
+        .domain(dow.map(function(d){ return d.day}))
+        .range([0, this.width*0.85])
+        // Add scales to axis
+        var x_axis = d3.axisBottom()
+        .scale(xScale).ticks(7);
+        //Append group and insert axis
+        svg_1.append("g")
+        .attr("transform", "translate(50," + 300 + ")")
+        .call(x_axis);
+
+    //Y-SCALE-SVG1 - DOW
+        var yScale = d3.scaleLinear()
+        .domain([0, this.data.length])
+        .range([this.height-100,50]);
+        // Add scales to axis
+        var y_axis = d3.axisLeft()
+        .scale(yScale);
+        //Append group and insert axis
+        svg_1.append("g")
+        .attr("transform", "translate(50," + 0 + ")")
+        .call(y_axis);
 
         // check total pickups per day of week - returns 7 days with total pickups per each day
             var nested_data = d3.nest()
@@ -172,8 +124,39 @@ class Bars {
     bars_hourly()
     {
         let svg_Pickup_byHours = d3.selectAll('body').selectAll('div').select('#svg2').selectAll('rect');
+        let svg_2 = d3.selectAll('body').selectAll('div').select('#svg2');
+
         console.log("in bar hourly");
         console.log(this.data);
+
+    
+ //X-SCALE -SVG2 - HOURLY
+       
+ 
+          // Create scale
+          var xScale = d3.scaleLinear()
+          .domain([0,23])
+          .range([0, this.width*0.85])
+          // Add scales to axis
+          var x_axis = d3.axisBottom()
+          .scale(xScale).ticks(23);
+          //Append group and insert axis
+          svg_2.append("g")
+          .attr("transform", "translate(55," + 300 + ")")
+          .call(x_axis);
+  
+         //Y-SCALE-SVG2 - HOURLY
+          var yScale = d3.scaleLinear()
+          .domain([0, this.data.length])
+          .range([this.height-100,50]);
+          // Add scales to axis
+          var y_axis = d3.axisLeft()
+          .scale(yScale);
+          //Append group and insert axis
+          svg_2.append("g")
+          .attr("transform", "translate(50," + 0 + ")")
+          .call(y_axis);
+
         // check total pickups per day of week - returns 7 days with total pickups per each day
             var nested_data = d3.nest()
             .key(function(d) { return d.Hour_of_Day; })
@@ -219,6 +202,8 @@ class Bars {
 dow_hourly()
 {
     let svg_Dow_Hours = d3.selectAll('body').selectAll('div').select('#svg3').selectAll('line');
+    let svg_3 = d3.selectAll('body').selectAll('div').select('#svg3');
+
     
     // check total pickups per day of week - returns 7 days with total pickups per each day
         var nested_data = d3.nest()
@@ -241,19 +226,54 @@ dow_hourly()
                             for(var j=0;j<d.values.length;j++)
                                 {return d3.max(d.values,d=>d.value)}
                         });
+
+                         //get max of all pickup count values per dow_hourly
+         let min = d3.min(dow_data, function(d,i) 
+         {
+             //console.log(d3.max(d.values,d=>d.value));
+             for(var j=0;j<d.values.length;j++)
+                 {return d3.min(d.values,d=>d.value)}
+         });
                     
         //clear bars
        
         var clear =[];
         svg_Dow_Hours.data(clear).exit().remove();
  
+        let width = 400;
+        let height = 400;
         
         //add bars
         console.log(max);
         
+
+           // Create scale
+           var xScale = d3.scaleLinear()
+           .domain([0,23])
+           .range([0, width*0.85])
+           // Add scales to axis
+           var x_axis = d3.axisBottom()
+           .scale(xScale).ticks(23);
+           //Append group and insert axis
+           svg_3.append("g")
+           .attr("transform", "translate(55," + 300 + ")")
+           .call(x_axis);
+   
+          //Y-SCALE-SVG3 - DOW-HOURLY
+           var yScale = d3.scaleLinear()
+           .domain([0, max])
+           .range([height-100,50]);
+           // Add scales to axis
+           var y_axis = d3.axisLeft()
+           .scale(yScale);
+           //Append group and insert axis
+           svg_3.append("g")
+           .attr("transform", "translate(50," + 0 + ")")
+           .call(y_axis);
+
         var pickUpScale = d3.scaleLinear()
         .domain([0, max])
-        .range([50, 400]);
+        .range([min, max]);
 
         
         let g = d3.selectAll('body').selectAll('div').select('#svg3').append('g').attr("transform","translate(0,0)").attr("id","gline3");
