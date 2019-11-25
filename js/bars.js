@@ -47,7 +47,7 @@ class Bars {
 
     bars_dow()
     {
-        let svg_DOW_bars = d3.selectAll('body').selectAll('div').select('#svg1').selectAll('rect');
+        let svg_DOW_bars = d3.selectAll('body').selectAll('div').select('#svg1');
 
         let svg_1 = d3.selectAll('body').selectAll('div').select('#svg1');
 
@@ -61,29 +61,8 @@ class Bars {
        {day:"Sunday"}
         ];
 
-         // Create scale
-        var xScale = d3.scaleBand()
-        .domain(dow.map(function(d){ return d.day}))
-        .range([0, this.width*0.85])
-        // Add scales to axis
-        var x_axis = d3.axisBottom()
-        .scale(xScale).ticks(7);
-        //Append group and insert axis
-        svg_1.append("g")
-        .attr("transform", "translate(50," + 300 + ")")
-        .call(x_axis);
-
-    //Y-SCALE-SVG1 - DOW
-        var yScale = d3.scaleLinear()
-        .domain([0, this.data.length])
-        .range([this.height-100,50]);
-        // Add scales to axis
-        var y_axis = d3.axisLeft()
-        .scale(yScale);
-        //Append group and insert axis
-        svg_1.append("g")
-        .attr("transform", "translate(50," + 0 + ")")
-        .call(y_axis);
+        console.log(this.data);
+        
 
         // check total pickups per day of week - returns 7 days with total pickups per each day
             var nested_data = d3.nest()
@@ -98,27 +77,101 @@ class Bars {
                 return d3.ascending(x.key, y.key);
              })
             
+             console.log(dow_data);
+                //get max of all pickup count values per dow_hourly
+            let max = d3.max(dow_data, function(d,i) 
+            {
+                
+                    {return d.value}
+            });
+
+                    //get max of all pickup count values per dow_hourly
+            let min = d3.min(dow_data, function(d,i) 
+            {
+                        {return d.value}
+            });
+
+            console.log(min);
+            console.log(max);
+
+             // remove old axis
+         d3.select("#xAxis1").remove();
+
+         d3.select("#yAxis1").remove();
+
+
+         // Create scale
+        var xScale = d3.scaleBand()
+        .domain(dow.map(function(d){ return d.day}))
+        .range([0, this.width*0.85])
+        // Add scales to axis
+        var x_axis = d3.axisBottom()
+        .scale(xScale).ticks(7);
+        //Append group and insert axis
+        svg_1.append("g").attr("id","xAxis1")
+        .attr("transform", "translate(50," + 300 + ")")
+        .call(x_axis);
+
+    //Y-SCALE-SVG1 - DOW
+        var yScale = d3.scaleLinear()
+        .domain([0, max])
+        .range([this.height-100,50]);
+        // Add scales to axis
+        var y_axis = d3.axisLeft()
+        .scale(yScale);
+        //Append group and insert axis
+        svg_1.append("g").attr("id","yAxis1")
+        .attr("transform", "translate(50," + 0 + ")")
+        .call(y_axis);
+
             //clear bars
            
             var clear =[];
-            svg_DOW_bars.data(clear).exit().remove();
+            svg_DOW_bars.selectAll("rect").data(clear).exit().remove();
      
             
             //add bars
             
             var pickUpScale = d3.scaleLinear()
-            .domain([0, this.originalData.length])
-            .range([50, 400]);
+            .domain([0, max])
+            .range([0, 250]);
     
-            
-            svg_DOW_bars.data(dow_data).enter().append("rect")
+            console.log(dow_data);
+
+             // remove old data
+         d3.select("#grect1").remove();
+
+
+            let g = d3.selectAll('body').selectAll('div').select('#svg1').append('g').attr("id","grect1");
+
+            let gBars = d3.selectAll('body').selectAll('div').select('#svg1').select('#grect1');
+
+         //   svg_DOW_bars.selectAll("rect").data(dow_data).enter().append("rect")
+            gBars.selectAll("rect").data(dow_data).enter().append("rect")
+
             .attr('x', function(d,i) {
+                console.log("in x");
+
                 return d.key*50;
-                //return i*50 + 50;
-               }
+                }
             
             ).attr('y', function(d){return 300-pickUpScale(d.value)}).attr('width',40).attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green")
            
+
+            let gTexts = d3.selectAll('body').selectAll('div').select('#svg1').select('#grect1').selectAll('text');
+
+            console.log(dow_data);
+            gTexts.data(dow_data).enter().append("text")
+            .attr('x', function(d,i) {
+                
+                 return d.key*50;
+               }
+            
+            ).attr('y', function(d){return  300-pickUpScale(d.value) -5})
+            .attr("dy", ".120em")
+            .text(function(d) { return d.value; })
+          //  .style("text-anchor", "middle");   	  
+
     }
 
     bars_hourly()
@@ -130,33 +183,8 @@ class Bars {
         console.log(this.data);
 
     
- //X-SCALE -SVG2 - HOURLY
-       
- 
-          // Create scale
-          var xScale = d3.scaleLinear()
-          .domain([0,23])
-          .range([0, this.width*0.85])
-          // Add scales to axis
-          var x_axis = d3.axisBottom()
-          .scale(xScale).ticks(23);
-          //Append group and insert axis
-          svg_2.append("g")
-          .attr("transform", "translate(55," + 300 + ")")
-          .call(x_axis);
-  
-         //Y-SCALE-SVG2 - HOURLY
-          var yScale = d3.scaleLinear()
-          .domain([0, this.data.length])
-          .range([this.height-100,50]);
-          // Add scales to axis
-          var y_axis = d3.axisLeft()
-          .scale(yScale);
-          //Append group and insert axis
-          svg_2.append("g")
-          .attr("transform", "translate(50," + 0 + ")")
-          .call(y_axis);
 
+ 
         // check total pickups per day of week - returns 7 days with total pickups per each day
             var nested_data = d3.nest()
             .key(function(d) { return d.Hour_of_Day; })
@@ -170,32 +198,108 @@ class Bars {
                 return d3.ascending(parseInt(x.key), parseInt(y.key));
              })
             
+             console.log(dow_data);
+
+             //get max of all pickup count values per dow_hourly
+       let max = d3.max(dow_data, function(d,i) 
+       {
+          
+               {return d.value}
+       });
+
+               //get max of all pickup count values per dow_hourly
+       let min = d3.min(dow_data, function(d,i) 
+       {
+                {return d.value}
+       });
+
+    
+
             //clear bars
            
             var clear =[];
             svg_Pickup_byHours.data(clear).exit().remove();
      
+            //X-SCALE -SVG2 - HOURLY
+        
+        
+         // remove old axis
+         d3.select("#xAxis2").remove();
+
+         d3.select("#yAxis2").remove();
+
+          // Create scale
+          var xScale = d3.scaleLinear()
+          .domain([0,23])
+          .range([0, this.width*0.85])
+          // Add scales to axis
+          var x_axis = d3.axisBottom()
+          .scale(xScale).ticks(23);
+          //Append group and insert axis
+          svg_2.append("g").attr("id","xAxis2")
+          .attr("transform", "translate(55," + 300 + ")")
+          .call(x_axis);
+  
+         //Y-SCALE-SVG2 - HOURLY
+          var yScale = d3.scaleLinear()
+          .domain([0, max])
+          .range([this.height-100,50]);
+          // Add scales to axis
+          var y_axis = d3.axisLeft()
+          .scale(yScale);
+          //Append group and insert axis
+          svg_2.append("g").attr("id","yAxis2")
+          .attr("transform", "translate(50," + 0 + ")")
+          .call(y_axis);
+
+
             
             //add bars
-            
-            var pickUpScale = d3.scaleLinear()
-            .domain([0, this.originalData.length])
-            .range([50, 400]);
+             var pickUpScale = d3.scaleLinear()
+            .domain([min, max])
+            .range([0, 250]);
     
-            
+             // remove old data
+         d3.select("#grect2").remove();
+
             let g = d3.selectAll('body').selectAll('div').select('#svg2').append('g').attr("transform","translate(42,0)").attr("id","grect2");
 
             let gBars = d3.selectAll('body').selectAll('div').select('#svg2').select('#grect2').selectAll('rect');
 
-            
+            console.log(dow_data);
             gBars.data(dow_data).enter().append("rect")
             .attr('x', function(d,i) {
                 
                  return d.key*15 + 5;
                }
             
-            ).attr('y', function(d){return 300-pickUpScale(d.value)}).attr('width',10).attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green")
+            ).attr('y', function(d){return  300-pickUpScale(d.value)}).attr('width',10).attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green")
            
+
+
+            let gTexts = d3.selectAll('body').selectAll('div').select('#svg2').select('#grect2').selectAll('text');
+
+            console.log(dow_data);
+
+            let highIndex =  d3.maxIndex(dow_data, function(d,i) 
+            {
+                     {return d.value}
+            });
+
+            let highPoint=dow_data.splice(highIndex,1);
+             console.log(highPoint);
+ 
+            gTexts.data(highPoint).enter().append("text")
+            .attr('x', function(d,i) {
+                  return d.key*15 + 5;
+               }
+            
+            ).attr('y', function(d){return  300-pickUpScale(d.value) -15})
+            .attr("dy", ".75em")
+ 
+             .text(function(d) { return d.value; });   	  
+
+     
     }
 
 //Dow and Hours - SVG3
@@ -244,8 +348,7 @@ dow_hourly()
         let height = 400;
         
         //add bars
-        console.log(max);
-        
+         
 
            // Create scale
            var xScale = d3.scaleLinear()
@@ -290,8 +393,7 @@ dow_hourly()
     for(var i=0;i<dow_data.length;i++)
         {
             var data = dow_data[i].values;
-            console.log(data);
-            data.sort(function(x, y){
+             data.sort(function(x, y){
                 return d3.ascending(parseInt(x.key), parseInt(y.key));
              })
 
@@ -346,7 +448,22 @@ let newYpath = Xpath.attr("d", lineGenerator(data));
             }
         }
 
-        this.bars_hourly();
+        let data =[1];
+        let fromHour = Math.floor(from);
+ 
+        let toHour = Math.floor(to);
+        d3.select("#hour-id").remove();
+
+        let svg_1 = d3.selectAll('body').selectAll('div').select('#svg1').append('g').attr("id","hour-id");
+        console.log(svg_1);
+        svg_1.append("text")
+        .attr("x", 100)
+        .attr("y", 10)
+        .attr("dy", ".35em")
+        .text("Hours: " + fromHour + "to" + toHour);
+
+        this.bars_dow();
+     //   this.bars_hourly();
     }
 
     filtByWeekDay(from, to) {
@@ -376,7 +493,7 @@ let newYpath = Xpath.attr("d", lineGenerator(data));
             }
         }
 
-       this.bars_dow();
+       this.bars_hourly();
     }
 
 }
