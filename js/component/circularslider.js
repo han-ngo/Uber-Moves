@@ -1,22 +1,24 @@
-class CircularSlider
-{
-    constructor(domElement)
-    {
+class CircularSlider {
+    constructor(domElement, segmentCount, draw_between_segment) {
         this.container = domElement;
         this.section_a = 0;
-        this.section_b = Math.PI; 
+        this.section_b = 2.0 * Math.PI;
+
         this.radius_outer = 80;
         this.radius_inner = 70;
         this.canvas_width = 300;
         this.canvas_height = 300;
 
-        this.segment_count = 7;
-        this.draw_between_segment = true;
+        this.segment_count = segmentCount;
+        this.section_a_index = 0;
+        this.section_b_index = this.segment_count;
+
+        this.draw_between_segment = draw_between_segment;
 
         this.canvas = document.createElement('canvas');
-        this.canvas.onmousedown = (e)=>{this.onMouseDown(e)};
-        this.canvas.onmousemove = (e)=>{this.onMouseMove(e)};
-        this.canvas.onmouseup = (e)=>{this.onMouseUp(e)};
+        this.canvas.onmousedown = (e) => { this.onMouseDown(e) };
+        this.canvas.onmousemove = (e) => { this.onMouseMove(e) };
+        this.canvas.onmouseup = (e) => { this.onMouseUp(e) };
         this.canvas.width = this.canvas_width;
         this.canvas.height = this.canvas_height;
 
@@ -24,58 +26,49 @@ class CircularSlider
         this.center_y = this.canvas_height * 0.5;
 
         this.container.appendChild(this.canvas);
-
-        this.init();
     }
 
-    init()
-    {
+    init() {
         this.render();
     }
 
     getMousePos(evt) {
         let rect = this.canvas.getBoundingClientRect();
         return {
-          x: evt.clientX - rect.left,
-          y: evt.clientY - rect.top
+            x: evt.clientX - rect.left,
+            y: evt.clientY - rect.top
         };
     }
 
     currentKnob = null;
 
-    length(x1, y1, x2, y2)
-    {
-        return Math.sqrt((x1 - x2) * (x1 - x2) + (y1- y2) * (y1 - y2));
+    length(x1, y1, x2, y2) {
+        return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     }
 
-    knotDetect(x, y, knob_pos)
-    {
-        let knob_radius =  (this.radius_outer - this.radius_inner) * 0.5;
+    knotDetect(x, y, knob_pos) {
+        let knob_radius = (this.radius_outer - this.radius_inner) * 0.5;
         let knob_x = this.center_x + (this.radius_outer + this.radius_inner) * 0.5 * Math.cos(knob_pos);
         let knob_y = this.center_y + (this.radius_outer + this.radius_inner) * 0.5 * Math.sin(knob_pos);
 
         return this.length(x, y, knob_x, knob_y) <= knob_radius;
     }
 
-    normalize(_x, _y)
-    {
+    normalize(_x, _y) {
         let len = this.length(_x, _y, 0, 0);
         return {
-            x: _x/len,
-            y: _y/len
+            x: _x / len,
+            y: _y / len
         }
     }
 
-    newKnotPos(mouseX, mouseY)
-    {
+    newKnotPos(mouseX, mouseY) {
         let newPos = this.normalize(mouseX - this.center_x, mouseY - this.center_y);
         let newKnobPos = 0;
-        if(newPos.y < 0)
-        {
+        if (newPos.y < 0) {
             newKnobPos = Math.PI + Math.acos(-1 * newPos.x)
         }
-        else
-        {
+        else {
             newKnobPos = Math.acos(newPos.x);
         }
         return newKnobPos;
@@ -86,19 +79,17 @@ class CircularSlider
     offsetX = 0;
     offsetY = 0;
 
-    onMouseDown(e)
-    {
+    onMouseDown(e) {
         let mousePos = this.getMousePos(e);
 
         // check press which knob
         // select knob b first
-        if(this.knotDetect(mousePos.x, mousePos.y, this.section_b))
-        {
+        if (this.knotDetect(mousePos.x, mousePos.y, this.section_b)) {
             this.currentKnob = 2;
-            
+
             this.currentX = mousePos.x;
             this.currentY = mousePos.y;
-            
+
             let knob_x = this.center_x + (this.radius_outer + this.radius_inner) * 0.5 * Math.cos(this.section_b);
             let knob_y = this.center_y + (this.radius_outer + this.radius_inner) * 0.5 * Math.sin(this.section_b);
 
@@ -107,13 +98,12 @@ class CircularSlider
 
             console.log("press b");
         }
-        else if(this.knotDetect(mousePos.x, mousePos.y, this.section_a))
-        {
+        else if (this.knotDetect(mousePos.x, mousePos.y, this.section_a)) {
             this.currentKnob = 1;
-            
+
             this.currentX = mousePos.x;
             this.currentY = mousePos.y;
-            
+
             let knob_x = this.center_x + (this.radius_outer + this.radius_inner) * 0.5 * Math.cos(this.section_a);
             let knob_y = this.center_y + (this.radius_outer + this.radius_inner) * 0.5 * Math.sin(this.section_a);
 
@@ -124,19 +114,16 @@ class CircularSlider
         console.log("down x:" + mousePos.x + " y:" + mousePos.y);
     }
 
-    onMouseMove(e)
-    {
+    onMouseMove(e) {
         let mousePos = this.getMousePos(e);
-        if(this.currentKnob == 2)
-        {
+        if (this.currentKnob == 2) {
             this.section_b = this.newKnotPos(mousePos.x - this.offsetX, mousePos.y - this.offsetY, this.section_b);
             this.render();
 
             this.currentX = mousePos.x;
             this.currentY = mousePos.y;
         }
-        else if(this.currentKnob == 1)
-        {
+        else if (this.currentKnob == 1) {
             this.section_a = this.newKnotPos(mousePos.x - this.offsetX, mousePos.y - this.offsetY, this.section_a);
             this.render();
 
@@ -145,30 +132,95 @@ class CircularSlider
         }
     }
 
-    onMouseUp(e)
+    getFilteredArrBySection()
     {
-        let mousePos = this.getMousePos(e);
-        if(this.currentKnob == 2)
+        let result = [];
+
+        if(this.section_b_index == this.section_a_index)
         {
-            this.currentKnob = -1;            
         }
-        else if(this.currentKnob == 1)
+        else if(this.section_b_index > this.section_a_index)
         {
-            this.currentKnob = -1;            
+            for(let i = this.section_a_index; i <= this.section_b_index - 1; i++)
+            {
+                result.push(i);
+            }
+        }
+        else
+        {
+            let removeList = [];
+            for(let i = this.section_b_index; i <= this.section_a_index - 1; i++)
+            {
+                removeList.push(i);
+            }
+            for(let i = 0; i < this.segment_count; i++)
+            {
+                if(removeList.indexOf(i) == -1)
+                {
+                    result.push(i);
+                }
+            }
+        }
+        return result;
+    }
+
+    onMouseUp(e) {
+        let mousePos = this.getMousePos(e);
+        if (this.currentKnob == 2) {
+            this.section_b_obj = this.snap(this.section_b);
+            this.section_b = this.section_b_obj.pos;
+            this.section_b_index = this.section_b_obj.index;
+
+            this.callOnChange(this.getFilteredArrBySection());
+
+            this.currentKnob = -1;
+            this.render();
+        }
+        else if (this.currentKnob == 1) {
+            this.section_a_obj = this.snap(this.section_a);
+            this.section_a = this.section_a_obj.pos;
+            this.section_a_index = this.section_a_obj.index;
+
+            this.callOnChange(this.getFilteredArrBySection());
+
+            this.currentKnob = -1;
+            this.render();
         }
         console.log("up x:" + mousePos.x + " y:" + mousePos.y);
     }
 
-    render()
+    callOnChange(filteredArr) {
+        console.log("change val is");
+        console.log(filteredArr);
+        for (let callback of this.onChangeListener) {
+            callback(filteredArr);
+        }
+    }
+
+    addOnChangeListener(callback) {
+        this.onChangeListener.push(callback);
+    }
+
+    clearOnChangeListener()
     {
+        this.onChangeListener = [];
+    }
+
+    onChangeListener = [];
+
+    render() {
         this.canvas.getContext("2d").clearRect(0, 0, this.canvas_width, this.canvas_height);
 
         this.draw_circle(this.radius_outer, 0, 2 * Math.PI, "#74b9ff");
+
         
         this.draw_circle(this.radius_outer, this.section_a, this.section_b, "#00b894");
 
         this.draw_circle(this.radius_inner, 0, 2 * Math.PI, "#dfe6e9");
 
+        this.draw_circle(this.radius_inner, this.section_a, this.section_b, "#636e72");
+        this.draw_circle_line(this.radius_outer + 45, this.section_a, this.section_b, "#636e72");
+        
         this.draw_knob(this.section_a);
         this.draw_knob(this.section_b);
 
@@ -178,16 +230,33 @@ class CircularSlider
         this.draw_axis_segment();
     }
 
-    draw_axis_segment()
-    {
-        if(this.segment_count <= 0)
-        {
+    snap(pos) {
+        let deltaBetween = 2.0 * Math.PI / this.segment_count;
+
+        let minDelta = 9999999;
+        let minIndex = -1;
+
+        for (let i = 0; i < this.segment_count + 1; i++) {
+            let thisPos = deltaBetween * i;
+            if (Math.abs(thisPos - pos) < minDelta) {
+                minIndex = i;
+                minDelta = Math.abs(thisPos - pos);
+            }
+        }
+
+        return {
+            pos: minIndex * deltaBetween,
+            index: minIndex
+        };
+    }
+
+    draw_axis_segment() {
+        if (this.segment_count <= 0) {
             return;
         }
         let segmentLength = 5;
         let deltaBetween = 2.0 * Math.PI / this.segment_count;
-        for(let i = 0; i < this.segment_count; i++)
-        {
+        for (let i = 0; i < this.segment_count; i++) {
             let pos = deltaBetween * i;
             let x_start = this.center_x + (this.radius_outer) * Math.cos(pos);
             let y_start = this.center_y + (this.radius_outer) * Math.sin(pos);
@@ -199,21 +268,36 @@ class CircularSlider
             ctx.moveTo(x_start, y_start);
             ctx.lineTo(x_end, y_end);
             ctx.stroke();
-            
-            if(this.draw_between_segment)
-            {
+
+            if (this.draw_between_segment) {
                 ctx.save();
-                
+
                 let text_x = this.center_x + (this.radius_outer + segmentLength + 20) * Math.cos(pos + deltaBetween * 0.5);
                 let text_y = this.center_y + (this.radius_outer + segmentLength + 20) * Math.sin(pos + deltaBetween * 0.5);
 
                 ctx.translate(text_x, text_y);
-                ctx.rotate(pos + deltaBetween * 0.5 + Math.PI/2);
+                ctx.rotate(pos + deltaBetween * 0.5 + Math.PI / 2);
 
                 ctx.font = "12px Comic Sans MS";
                 ctx.fillStyle = "black";
                 ctx.textAlign = "center";
-                ctx.fillText("Wes", 0, 0);
+                ctx.fillText(this.axisTextFunc == null ? i : this.axisTextFunc(i), 0, 0);
+                ctx.restore();
+            }
+            else
+            {
+                ctx.save();
+
+                let text_x = this.center_x + (this.radius_outer + segmentLength + 20) * Math.cos(pos);
+                let text_y = this.center_y + (this.radius_outer + segmentLength + 20) * Math.sin(pos);
+
+                ctx.translate(text_x, text_y);
+                ctx.rotate(pos);
+
+                ctx.font = "12px Comic Sans MS";
+                ctx.fillStyle = "black";
+                ctx.textAlign = "center";
+                ctx.fillText(this.axisTextFunc == null ? i : this.axisTextFunc(i), 0, 0);
                 ctx.restore();
             }
         }
@@ -221,12 +305,10 @@ class CircularSlider
 
     axisTextFunc = null;
 
-    draw_knob_text(pos, text = null, textOffset = 20)
-    {
+    draw_knob_text(pos, text = null, textOffset = 20) {
         let align = "left";
 
-        if((pos > 0.5 * Math.PI) && (pos < 1.5 * Math.PI))
-        {
+        if ((pos > 0.5 * Math.PI) && (pos < 1.5 * Math.PI)) {
             align = "right";
         }
 
@@ -237,11 +319,10 @@ class CircularSlider
         ctx.font = "18px Comic Sans MS";
         ctx.fillStyle = "black";
         ctx.textAlign = align;
-        ctx.fillText(text==null?pos:"Hello World", text_x, text_y);
+        ctx.fillText(text == null ? pos : "Hello World", text_x, text_y);
     }
 
-    draw_knob(pos)
-    {
+    draw_knob(pos) {
         let x = this.center_x + (this.radius_outer + this.radius_inner) * 0.5 * Math.cos(pos);
         let y = this.center_y + (this.radius_outer + this.radius_inner) * 0.5 * Math.sin(pos);
 
@@ -252,8 +333,16 @@ class CircularSlider
         ctx.fill();
     }
 
-    draw_circle(radius, start, end, color)
+    draw_circle_line(radius, start, end, color)
     {
+        let ctx = this.canvas.getContext('2d');
+        ctx.beginPath();
+        ctx.arc(this.center_x, this.center_y, radius, start, end);
+        ctx.strokeStyle = color;
+        ctx.stroke();
+    }
+
+    draw_circle(radius, start, end, color) {
         let ctx = this.canvas.getContext('2d');
         ctx.beginPath();
         ctx.moveTo(this.center_x, this.center_y);

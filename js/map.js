@@ -7,6 +7,16 @@ class GeoMap {
     mode = 0;
 
     init() {
+        this.hourFilteredArray = [];
+        for (let i = 0; i <= 23; i++) {
+            this.hourFilteredArray.push(i);
+        }
+
+        this.weekFilteredArray = [];
+        for (let i = 0; i <= 6; i++) {
+            this.weekFilteredArray.push(i);
+        }
+
         this.data = [];
 
         const MAP_CONTAINER = "map-container";
@@ -53,27 +63,24 @@ class GeoMap {
             'position': 'top-right',
             'items': [{
                 item: 'Map Mode',
-                click: function () {  
+                click: function () {
                 },
                 children: [{
                     item: 'Cluster',
-                    click: ()=> 
-                    { 
+                    click: () => {
                         this.mode = 2;
                         this.updateMapMode();
                     }
-                },{
+                }, {
                     item: 'Circle',
-                    click: ()=> 
-                    { 
+                    click: () => {
                         this.mode = 0;
                         this.updateMapMode();
                     }
                 }, {
                     item: 'HeatMap',
-                    click: ()=> 
-                    { 
-                        this.mode = 1; 
+                    click: () => {
+                        this.mode = 1;
                         this.updateMapMode();
                     }
                 }]
@@ -85,7 +92,7 @@ class GeoMap {
         this.updateMapMode();
     }
 
-    SetClusterNeedRedraw(){
+    SetClusterNeedRedraw() {
         this.clusterLayer._renderer._toRedraw = true;
     }
 
@@ -119,14 +126,12 @@ class GeoMap {
         });
 
         map.addLayer(this.clusterLayer);
-        
-        map.on('click', (e)=>{
+
+        map.on('click', (e) => {
             let callbackResults = [];
 
-            if(this.mode != 2)
-            {
-                for(let callback of this.selectionCallbacks)
-                {
+            if (this.mode != 2) {
+                for (let callback of this.selectionCallbacks) {
                     callback(callbackResults);
                 }
                 return;
@@ -137,32 +142,28 @@ class GeoMap {
             console.log(target);
 
             this.SetClusterNeedRedraw()
-            
-            if(target.children == null)
-            {
-                for(let callback of this.selectionCallbacks)
-                {
+
+            if (target.children == null) {
+                for (let callback of this.selectionCallbacks) {
                     callback(callbackResults);
                 }
                 return;
             }
-            
+
             target.cluster["selected"] = true;
 
-            for(let child of target.children)
-            {
+            for (let child of target.children) {
                 callbackResults.push(this.data[child.data_index]);
             }
 
-            for(let callback of this.selectionCallbacks)
-            {
+            for (let callback of this.selectionCallbacks) {
                 callback(callbackResults);
             }
 
-            
+
         });
 
-        function OnClick(e){
+        function OnClick(e) {
             console.log(e.target);
         };
     }
@@ -227,32 +228,28 @@ class GeoMap {
         map.addLayer(this.d3Layer);
 
         map.on('moving moveend', (e) => {
-            if(this.mode != 0)
-            {
+            if (this.mode != 0) {
                 return;
             }
             this.d3Layer.redraw();
         });
 
         map.on('zooming zoomend', (e) => {
-            if(this.mode != 0)
-            {
+            if (this.mode != 0) {
                 return;
             }
             this.d3Layer.redraw();
         });
 
         map.on('pitch', (e) => {
-            if(this.mode != 0)
-            {
+            if (this.mode != 0) {
                 return;
             }
             this.d3Layer.redraw();
         });
 
         map.on('rotate', (e) => {
-            if(this.mode != 0)
-            {
+            if (this.mode != 0) {
                 return;
             }
             this.d3Layer.redraw();
@@ -274,14 +271,14 @@ class GeoMap {
             this.hideCircles();
             this.clusterLayer.hide();
         }
-        else if(this.mode == 0) {
+        else if (this.mode == 0) {
             this.heatLayer.clear();
             // this.showCircles();
             this.d3Layer.redraw();
             this.clusterLayer.hide();
         }
         // cluster
-        else{
+        else {
             this.hideCircles();
             this.heatLayer.clear();
             this.clusterLayer.show();
@@ -322,74 +319,58 @@ class GeoMap {
         this.clusterLayer.addGeometry(newMarks);
     }
 
-    filtByHourTime(from, to) {
+    filtByHourTimeArr(filteredArray) {
         this.data = [];
 
+        this.hourFilteredArray = filteredArray;
+
         for (let item of this.originalData) {
+            let day = item.date.getDay();
+            if (day == 0) {
+                day = 6;
+            }
+            else {
+                day -= 1;
+            }
             let hour = item.date.getHours();
-            let minute = item.date.getMinutes();
 
-            let fromHour = Math.floor(from);
-            let fromMin = (from - fromHour) * 60;
-
-            let toHour = Math.floor(to);
-            let toMin = (to - toHour) * 60;
-
-            if (
-                (
-                    (hour == fromHour && minute >= fromMin)
-                    ||
-                    hour > fromHour
-                )
-                &&
-                (
-                    (hour == toHour && minute <= toMin)
-                    ||
-                    hour < toHour
-                )
-            ) {
-                this.data.push(item);
+            if (this.weekFilteredArray.indexOf(day) != -1) {
+                if (this.hourFilteredArray.indexOf(hour) != -1) {
+                    this.data.push(item);
+                }
             }
         }
 
-        if(this.mode == 0)
-        {
+        if (this.mode == 0) {
             this.d3Layer.redraw();
         }
-        if (this.mode == 1) 
-        {
+        if (this.mode == 1) {
             this.renderHeatMap(this.data);
         }
-        if(this.mode == 2)
-        {
+        if (this.mode == 2) {
             this.renderClusterLayer(this.data);
         }
     }
 
-    filtByWeekDay(from, to) {
+    filtByWeekDayArr(filteredArray) {
         this.data = [];
-        
+
+        this.weekFilteredArray = filteredArray;
+
         for (let item of this.originalData) {
             let day = item.date.getDay();
-            
-            let fromDay = Math.floor(from);
+            if (day == 0) {
+                day = 6;
+            }
+            else {
+                day -= 1;
+            }
+            let hour = item.date.getHours();
 
-            let toDay = Math.floor(to);
-
-            if (
-                (
-                    (day == fromDay)
-                    ||
-                    day > fromDay
-                )
-                &&
-                (
-                    (day == toDay)
-                    ||
-                    day < toDay
-                )
-            ) {
-                this.data.push(item);
+            if (this.weekFilteredArray.indexOf(day) != -1) {
+                if (this.hourFilteredArray.indexOf(hour) != -1) {
+                    this.data.push(item);
+                }
             }
         }
 
@@ -413,13 +394,11 @@ class GeoMap {
         this.renderClusterLayer(data);
     }
 
-    onSelection(callback)
-    {
+    onSelection(callback) {
         this.selectionCallbacks.push(callback);
     }
 
-    removeAllSelectionCallback()
-    {
+    removeAllSelectionCallback() {
         this.selectionCallbacks.clear();
     }
 

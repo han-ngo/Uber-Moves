@@ -22,14 +22,13 @@
 //     // }
 // });
 
-d3.json("data/newyork.geojson").then(nyGeoJson=>{
-    d3.csv("data/data_with_district.csv").then(uberData=>{
+d3.json("data/newyork.geojson").then(nyGeoJson => {
+    d3.csv("data/data_with_district.csv").then(uberData => {
 
-   
+
 
         // processing, convert date string like "4/1/2014 0:11:00" to Javascript Date class
-        for(let item of uberData)
-        {
+        for (let item of uberData) {
             item.date = new Date(item["Date/Time"]);
         }
 
@@ -39,33 +38,76 @@ d3.json("data/newyork.geojson").then(nyGeoJson=>{
         let map = new GeoMap();
         AppManager.getInstance().setMap(map);
         map.update(uberData);
-        
+
         // map.onSelection((data)=>{
         //     console.log(data);
         // });
 
         // bar charts
-        
-        let bar =new Bars(uberData);
+
+        let bar = new Bars(uberData);
         bar.createBars();
 
         // circular slider
-        let circularSliderContainer = 
-        document.createElement('div');
-        document.body.appendChild(circularSliderContainer);
-        let circularSlider = new CircularSlider(circularSliderContainer);
-        
+        let weekCircularSliderContainer =
+            document.createElement('div');
+        document.body.appendChild(weekCircularSliderContainer);
+        let weekCircularSlider = new CircularSlider(weekCircularSliderContainer, 7, true);
+        weekCircularSlider.axisTextFunc = (index) => {
+            switch (index) {
+                case 0:
+                    return 'Mon';
+                    break;
+                case 1:
+                    return 'Tue'
+                    break;
+                case 2:
+                    return 'Wes'
+                    break;
+                case 3:
+                    return 'Thu'
+                    break;
+                case 4:
+                    return 'Fri'
+                    break;
+                case 5:
+                    return 'Sat'
+                    break;
+                case 6:
+                    return 'Sun'
+                    break;
+                default:
+                    break;
+            }
+        };
+        weekCircularSlider.init();
+        weekCircularSlider.addOnChangeListener((arr) => {
+            map.filtByWeekDayArr(arr);
+        });
+
+        let hourCircularSliderContainer =
+            document.createElement('div');
+        document.body.appendChild(hourCircularSliderContainer);
+        let hourCircularSlider = new CircularSlider(hourCircularSliderContainer, 24, false);
+        hourCircularSlider.axisTextFunc = (index) => {
+            return index.toString() + ":00";
+        };
+        hourCircularSlider.init();
+        hourCircularSlider.addOnChangeListener((arr) => {
+            map.filtByHourTimeArr(arr);
+        });
+
         // hour slider
         let hourSliderContainer = d3.select("body").append("div")
             .attr("id", 'hourSlider');
         let hourSlider = new BrushSlider(hourSliderContainer, new BrushConfig());
-        hourSlider.onClear = ()=>{
-            map.filtByHourTime(0,24);
-            bar.filtByHourTime(0,24);
+        hourSlider.onClear = () => {
+            // map.filtByHourTime(0, 24);
+            bar.filtByHourTime(0, 24);
 
         };
-        hourSlider.onChange = (from, to)=>{
-            map.filtByHourTime(from, to);
+        hourSlider.onChange = (from, to) => {
+            // map.filtByHourTime(from, to);
             bar.filtByHourTime(from, to);
 
         };
@@ -76,19 +118,19 @@ d3.json("data/newyork.geojson").then(nyGeoJson=>{
         // from 1 = sunday to 7 = saturday
         let dateSlider = new BrushSlider(dateSliderContainer, new BrushConfig(400, 50, 10, 10, 1, 7, 7));
         dateSlider.onClear = () => {
-            map.filtByWeekDay(0, 6);
+            // map.filtByWeekDay(0, 6);
             bar.filtByWeekDay(0, 6);
 
         };
         dateSlider.onChange = (from, to) => {
-            map.filtByWeekDay(from, to);
+            // map.filtByWeekDay(from, to);
             bar.filtByWeekDay(from, to);
 
         };
 
-      
+
     });
-    
+
 })
 
 
