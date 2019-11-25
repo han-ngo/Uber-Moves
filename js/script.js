@@ -49,7 +49,13 @@ d3.json("data/newyork.geojson").then(nyGeoJson=>{
         let bar =new Bars(uberData);
         bar.createBars();
 
-        // hours slider
+        // circular slider
+        let circularSliderContainer = 
+        document.createElement('div');
+        document.body.appendChild(circularSliderContainer);
+        let circularSlider = new CircularSlider(circularSliderContainer);
+        
+        // hour slider
         let hourSliderContainer = d3.select("body").append("div")
             .attr("id", 'hourSlider');
         let hourSlider = new BrushSlider(hourSliderContainer, new BrushConfig());
