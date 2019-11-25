@@ -128,7 +128,9 @@ d3.json("data/newyork.geojson").then(nyGeoJson => {
 
         };
 
-
+        // table
+        let table = new Table(uberData);
+        table.createTable();
     });
 
 })
