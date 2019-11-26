@@ -20,9 +20,9 @@ class GeoMap {
         this.data = [];
 
         const MAP_CONTAINER = "map-container";
-        d3.select("body").append("div")
+        d3.select("#mapContainer").append("div")
             .attr("id", MAP_CONTAINER)
-            .style("width", "800px")
+            .style("width", "100%")
             .style("height", "600px");
 
         var map = new maptalks.Map(MAP_CONTAINER, {
@@ -45,8 +45,8 @@ class GeoMap {
 
         d3.select(".maptalks-attribution").style("opacity", 0);
 
-        var extent = map.getExtent();
-        map.setMaxExtent(extent);
+        // var extent = map.getExtent();
+        // map.setMaxExtent(extent);
 
         this.InitGeoJsonPolygon();
 

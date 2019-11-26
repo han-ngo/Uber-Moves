@@ -50,8 +50,7 @@ d3.json("data/newyork.geojson").then(nyGeoJson => {
 
         // circular slider
         let weekCircularSliderContainer =
-            document.createElement('div');
-        document.body.appendChild(weekCircularSliderContainer);
+            document.getElementById("weekDaySlider");
         let weekCircularSlider = new CircularSlider(weekCircularSliderContainer, 7, true);
         weekCircularSlider.axisTextFunc = (index) => {
             switch (index) {
@@ -86,8 +85,7 @@ d3.json("data/newyork.geojson").then(nyGeoJson => {
         });
 
         let hourCircularSliderContainer =
-            document.createElement('div');
-        document.body.appendChild(hourCircularSliderContainer);
+            document.getElementById('hourSlider');
         let hourCircularSlider = new CircularSlider(hourCircularSliderContainer, 24, false);
         hourCircularSlider.axisTextFunc = (index) => {
             return index.toString() + ":00";

@@ -11,13 +11,27 @@ class Table {
         this.width = 600;
     }
 
-    createTable() {
-        let div = d3.select("body").append('div').attr("id","table");
-        let tableComponent = div.append('table').attr('width',this.width).attr('height',this.height);
+    updateData(dataArr)
+    {
+        if(dataArr == null || dataArr.length == 0)
+        {
+            this.table.replaceData(this.originalData);
+            return;
+        }
+        this.table.replaceData(dataArr);
+    }
 
-        var table = new Tabulator("#table", {
+    createTable() {
+        d3.select("#tableContainer").append('div')
+        .attr("id","table")
+        .style('width',this.width + 'px');
+        //.style('height',this.height + 'px');
+        // let tableComponent = div.append('table').attr('width',this.width).attr('height',this.height);
+
+        this.table = new Tabulator("#table", {
+            autoResize:true,
           data: this.data, //load row data from array
-          layout: "fitDataFill", //fit columns to width of table
+          layout: "fitColumns", //fit columns to width of table
           responsiveLayout: "hide", //hide columns that dont fit on the table
           tooltips: true, //show tool tips on cells
           addRowPos: "top", //when adding a new row, add it to the top of the table
@@ -34,27 +48,30 @@ class Table {
           columns: [
             //define the table columns
             { title: "Date/Time", field: "date", width:300 },
-            { title: "Lat", field: "lat", visible: "false" },
-            { title: "Lon", field: "lon", visible: "false" },
-            { title: "Weight", field: "weight", visible: "false" },
-            { title: "Base", field: "base", visible: "false" },
-            { title: "key", field: "key", visible: "false" },
-            { title: "Total Same Key", field: "totalSameKey", visible: "false" },
-            { title: "Day Of Week", field: "Dow", sorter: "number", width:130 },
-            { title: "Time", field: "Hour_of_Day", sorter: "number", width:130 },
-            { title: "District", field: "District", sorter: "string", sorterParams:{alignEmptyValues:"bottom"}, width:130 }
+            // { title: "Lat", field: "lat", visible: "false" },
+            // { title: "Lon", field: "lon", visible: "false" },
+            // { title: "Weight", field: "weight", visible: "false" },
+            // { title: "Base", field: "base", visible: "false" },
+            // { title: "key", field: "key", visible: "false" },
+            // { title: "Total Same Key", field: "totalSameKey", visible: "false" },
+            { title: "Day Of Week", field: "Dow", sorter: "number", width:100 },
+            { title: "Time", field: "Hour_of_Day", sorter: "number", width:100 },
+            { title: "District", field: "District", sorter: "string", sorterParams:{alignEmptyValues:"bottom"}, widthGrow:1 }
           ]
         });
 
+        AppManager.getInstance().getMap().onSelection((data)=>{
+            this.updateData(data);
+        });
         // hide unnecessary columns
-        table.hideColumn("lat");
-        table.hideColumn("lon");
-        table.hideColumn("weight");
-        table.hideColumn("base");
-        table.hideColumn("key");
-        table.hideColumn("totalSameKey");
+        // table.hideColumn("lat");
+        // table.hideColumn("lon");
+        // table.hideColumn("weight");
+        // table.hideColumn("base");
+        // table.hideColumn("key");
+        // table.hideColumn("totalSameKey");
 
-        this.updateTable();
+        // this.updateTable();
     }
 
 
