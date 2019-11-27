@@ -24,12 +24,35 @@ class Bars {
 
    
 
-       
+        d3.select("#hour-id").remove();
+
+        let hourID = d3.selectAll('body').selectAll('div').select('#svg1').append('g').attr("id","hour-id");
+         hourID.append("text")
+        .attr("x", 100)
+        .attr("y", 10)
+        .attr("dy", ".35em")
+        .text("Hours: " + "00:00" +  " to " + "24:00");
 
 
+        d3.select("#dow-id").remove();
+
+        let dowID = d3.selectAll('body').selectAll('div').select('#svg2').append('g').attr("id","dow-id");
+         dowID.append("text")
+        .attr("x", 100)
+        .attr("y", 10)
+        .attr("dy", ".35em")
+        .text("Days: " + "Monday" +  " to " + "Sunday");
        
+        let color =["green","red","brown","orange","black","blue","yellow"];
+        let dow =["green","red","brown","orange","black","blue","yellow"];
+
  
-
+        let dowLegend = d3.selectAll('body').selectAll('div').select('#svg3').append('g').attr("id","dow");
+        dowLegend.selectAll("rect").data(dow).append("rect")
+        .attr("x", (d,i)=> 50 + i * 10)
+        .attr("y", 10)
+        .attr("width", 10)
+        .attr("height", 10)
 
 
         this.updateBars();
@@ -51,6 +74,10 @@ class Bars {
 
         let svg_1 = d3.selectAll('body').selectAll('div').select('#svg1');
 
+
+
+
+
          //X-SCALE -SVG1 - DOW
        var dow = [{day:"Monday"},
        {day:"Tuesday"},
@@ -63,6 +90,7 @@ class Bars {
 
         console.log(this.data);
         
+      
 
         // check total pickups per day of week - returns 7 days with total pickups per each day
             var nested_data = d3.nest()
@@ -460,7 +488,7 @@ let newYpath = Xpath.attr("d", lineGenerator(data));
         .attr("x", 100)
         .attr("y", 10)
         .attr("dy", ".35em")
-        .text("Hours: " + fromHour + "to" + toHour);
+        .text("Hours: " + fromHour + ":00" +  " to " + toHour + ":00");
 
         this.bars_dow();
      //   this.bars_hourly();
@@ -492,6 +520,35 @@ let newYpath = Xpath.attr("d", lineGenerator(data));
                 this.data.push(item);
             }
         }
+
+
+        var dow = [{day:"Monday"},
+        {day:"Tuesday"},
+        {day:"Wednesday"},
+        {day:"Thursday"},
+        {day:"Friday"},
+        {day:"Saturday"},
+        {day:"Sunday"}
+         ];
+
+         console.log(dow[0].day);
+        d3.select("#dow-id").remove();
+
+        let fromDay = Math.floor(from);
+        let toDay = Math.floor(to);
+
+        let hourID = d3.selectAll('body').selectAll('div').select('#svg2').append('g').attr("id","dow-id");
+         hourID.append("text")
+        .attr("x", 100)
+        .attr("y", 10)
+        .attr("dy", ".35em")
+        .text(function(){
+            if(fromDay!=toDay)
+            return "Days: " + dow[fromDay].day +  " to " + dow[toDay].day;
+            else
+            return "Days: " + dow[fromDay].day +  " Only"; 
+            });
+       
 
        this.bars_hourly();
     }
