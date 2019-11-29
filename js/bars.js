@@ -9,6 +9,17 @@ class Bars {
         this.height = 400;
         this.width = 400;
 
+        this.hourFilteredArray = [];
+        for (let i = 0; i <= 23; i++) {
+            this.hourFilteredArray.push(i);
+        }
+
+        this.weekFilteredArray = [];
+        for (let i = 0; i <= 6; i++) {
+            this.weekFilteredArray.push(i);
+        }
+
+
     }
 
     createBars() {
@@ -54,7 +65,21 @@ class Bars {
         .attr("width", 10)
         .attr("height", 10)
 
+        AppManager.getInstance().getMap().onSelection((data)=>{
+            if(data == null || data.length == 0)
+            {
+                this.data = this.originalData;
+            }
+            else    
+            {
+                this.data= data;
+            }
 
+
+        this.updateBars();
+
+         });
+        
         this.updateBars();
     }
 
@@ -301,7 +326,10 @@ class Bars {
                  return d.key*15 + 5;
                }
             
-            ).attr('y', function(d){return  300-pickUpScale(d.value)}).attr('width',10).attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green")
+            ).attr('y', function(d){return  300-pickUpScale(d.value)})
+            .attr('width',10).attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green")
+            .transition()
+            .duration(750)
            
 
 
@@ -333,7 +361,8 @@ class Bars {
 //Dow and Hours - SVG3
 dow_hourly()
 {
-    let svg_Dow_Hours = d3.selectAll('body').selectAll('div').select('#svg3').selectAll('line');
+    let svg_Dow_Hours = d3.selectAll('body').selectAll('div').select('#svg3').select("#gline3").selectAll('path');
+ 
     let svg_3 = d3.selectAll('body').selectAll('div').select('#svg3');
 
     
@@ -354,17 +383,15 @@ dow_hourly()
          //get max of all pickup count values per dow_hourly
          let max = d3.max(dow_data, function(d,i) 
                         {
-                            //console.log(d3.max(d.values,d=>d.value));
-                            for(var j=0;j<d.values.length;j++)
-                                {return d3.max(d.values,d=>d.value)}
+                            return d.value;
                         });
 
                          //get max of all pickup count values per dow_hourly
          let min = d3.min(dow_data, function(d,i) 
          {
              //console.log(d3.max(d.values,d=>d.value));
-             for(var j=0;j<d.values.length;j++)
-                 {return d3.min(d.values,d=>d.value)}
+             return d.value;
+
          });
                     
         //clear bars
@@ -377,6 +404,10 @@ dow_hourly()
         
         //add bars
          
+         // remove old axis
+         d3.select("#xAxis3").remove();
+
+         d3.select("#yAxis3").remove();
 
            // Create scale
            var xScale = d3.scaleLinear()
@@ -386,7 +417,7 @@ dow_hourly()
            var x_axis = d3.axisBottom()
            .scale(xScale).ticks(23);
            //Append group and insert axis
-           svg_3.append("g")
+           svg_3.append("g").attr("id","xAxis3")
            .attr("transform", "translate(55," + 300 + ")")
            .call(x_axis);
    
@@ -398,7 +429,7 @@ dow_hourly()
            var y_axis = d3.axisLeft()
            .scale(yScale);
            //Append group and insert axis
-           svg_3.append("g")
+           svg_3.append("g").attr("id","yAxis3")
            .attr("transform", "translate(50," + 0 + ")")
            .call(y_axis);
 
@@ -444,6 +475,141 @@ let newYpath = Xpath.attr("d", lineGenerator(data));
         }
 }
 
+filtByHourTimeArr(filteredArray) {
+    this.data = [];
+
+    this.hourFilteredArray = filteredArray;
+
+    for (let item of this.originalData) {
+        let day = item.date.getDay();
+        if (day == 0) {
+            day = 6;
+        }
+        else {
+            day -= 1;
+        }
+        let hour = item.date.getHours();
+ 
+        if (this.weekFilteredArray.indexOf(day) != -1) {
+            if (this.hourFilteredArray.indexOf(hour) != -1) {
+                this.data.push(item);
+            }
+        }
+    }
+
+    console.log(this.hourFilteredArray);
+    let data =[1];
+
+    let fromHour = this.hourFilteredArray[0];
+
+    let toHour = this.hourFilteredArray[this.hourFilteredArray.length-1];
+
+    //if hours are between two days - eg:11pm to 6 am
+    for(var i=0; i<this.hourFilteredArray.length-1;i++)
+
+        {
+            // difference between hours is not 1..
+            if(Math.floor(this.hourFilteredArray[i+1]) - Math.floor(this.hourFilteredArray[i])!= 1)
+                {
+                    fromHour = this.hourFilteredArray[i+1];
+                    toHour = this.hourFilteredArray[i];
+ 
+                     break;
+                }
+         }
+
+    
+
+    
+
+    d3.select("#hour-id").remove();
+
+    let svg_1 = d3.selectAll('body').selectAll('div').select('#svg1').append('g').attr("id","hour-id");
+    console.log(svg_1);
+    svg_1.append("text")
+    .attr("x", 100)
+    .attr("y", 10)
+    .attr("dy", ".35em")
+    .text("Hours: " + fromHour + ":00" +  " to " + toHour + ":00");
+    
+
+    this.bars_dow();
+    this.bars_hourly();
+
+}
+
+filtByWeekDayArr(filteredArray) {
+    this.data = [];
+
+    this.weekFilteredArray = filteredArray;
+
+    for (let item of this.originalData) {
+        let day = item.date.getDay();
+        if (day == 0) {
+            day = 6;
+        }
+        else {
+            day -= 1;
+        }
+        let hour = item.date.getHours();
+
+        if (this.weekFilteredArray.indexOf(day) != -1) {
+            if (this.hourFilteredArray.indexOf(hour) != -1) {
+                this.data.push(item);
+            }
+        }
+    }
+
+    var dow = [{day:"Monday"},
+        {day:"Tuesday"},
+        {day:"Wednesday"},
+        {day:"Thursday"},
+        {day:"Friday"},
+        {day:"Saturday"},
+        {day:"Sunday"}
+         ];
+
+         console.log(this.weekFilteredArray);
+        d3.select("#dow-id").remove();
+
+         
+
+        let fromDay = this.weekFilteredArray[0];
+
+    let toDay = this.weekFilteredArray[this.weekFilteredArray.length-1];
+
+    //if hours are between two days - eg:11pm to 6 am
+    for(var i=0; i<this.weekFilteredArray.length-1;i++)
+
+        {
+            // difference between hours is not 1..
+            if(Math.floor(this.weekFilteredArray[i+1]) - Math.floor(this.weekFilteredArray[i])!= 1)
+                {
+                    fromDay = this.weekFilteredArray[i+1];
+                    toDay = this.weekFilteredArray[i];
+ 
+                     break;
+                }
+         }
+
+
+        let hourID = d3.selectAll('body').selectAll('div').select('#svg2').append('g').attr("id","dow-id");
+         hourID.append("text")
+        .attr("x", 100)
+        .attr("y", 10)
+        .attr("dy", ".35em")
+        .text(function(){
+            if(fromDay!=toDay)
+            return "Days: " + dow[fromDay].day +  " to " + dow[toDay].day;
+            else
+            return "Days: " + dow[fromDay].day +  " Only"; 
+            });
+       
+
+       this.bars_hourly();
+       this.bars_dow();
+
+}
 
 
     filtByHourTime(from, to) {
@@ -488,7 +654,7 @@ let newYpath = Xpath.attr("d", lineGenerator(data));
         .attr("x", 100)
         .attr("y", 10)
         .attr("dy", ".35em")
-        .text("Hours: " + fromHour + ":00" +  " to " + toHour + ":00");
+        .text("Hours1: " + fromHour + ":00" +  " to " + toHour + ":00");
 
         this.bars_dow();
      //   this.bars_hourly();
