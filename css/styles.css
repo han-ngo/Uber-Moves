@@ -14,3 +14,9 @@
     width: 610px;
     flex-grow: 0;
 }
+.col.my-small-col
+{
+    width: 310px;
+    flex-grow: 0;
+    flex-basis: auto;
+}

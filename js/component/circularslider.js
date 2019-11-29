@@ -164,6 +164,25 @@ class CircularSlider {
         return result;
     }
 
+    setSection(sectionA, sectionB)
+    {
+        this.section_a = sectionA;
+        this.section_b = sectionB;
+        
+        this.section_b_obj = this.snap(this.section_b);
+        this.section_b = this.section_b_obj.pos;
+        this.section_b_index = this.section_b_obj.index;
+
+        this.section_a_obj = this.snap(this.section_a);
+        this.section_a = this.section_a_obj.pos;
+        this.section_a_index = this.section_a_obj.index;
+
+        this.callOnChange(this.getFilteredArrBySection());
+
+        this.currentKnob = -1;
+        this.render();
+    }
+
     onMouseUp(e) {
         let mousePos = this.getMousePos(e);
         if (this.currentKnob == 2) {
