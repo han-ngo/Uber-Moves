@@ -13,7 +13,8 @@ class Bars {
 
     createBars() {
         // set the ranges
-         let div = d3.select("body").append('div').attr("id","bars");
+        let div = d3.select("#bars");
+        this.container = div;
 
         let svg_DOW_bars = div.append('svg').attr('width',400).attr('height',400).attr("id","svg1");
         let svg_Pickup_byHours = div.append('svg').attr('width',400).attr('height',400).attr("id","svg2");;
@@ -26,7 +27,7 @@ class Bars {
 
         d3.select("#hour-id").remove();
 
-        let hourID = d3.selectAll('body').selectAll('div').select('#svg1').append('g').attr("id","hour-id");
+        let hourID = div.select('#svg1').append('g').attr("id","hour-id");
          hourID.append("text")
         .attr("x", 100)
         .attr("y", 10)
@@ -36,7 +37,7 @@ class Bars {
 
         d3.select("#dow-id").remove();
 
-        let dowID = d3.selectAll('body').selectAll('div').select('#svg2').append('g').attr("id","dow-id");
+        let dowID = div.select('#svg2').append('g').attr("id","dow-id");
          dowID.append("text")
         .attr("x", 100)
         .attr("y", 10)
@@ -47,7 +48,7 @@ class Bars {
         let dow =["green","red","brown","orange","black","blue","yellow"];
 
  
-        let dowLegend = d3.selectAll('body').selectAll('div').select('#svg3').append('g').attr("id","dow");
+        let dowLegend = div.select('#svg3').append('g').attr("id","dow");
         dowLegend.selectAll("rect").data(dow).append("rect")
         .attr("x", (d,i)=> 50 + i * 10)
         .attr("y", 10)
@@ -70,9 +71,9 @@ class Bars {
 
     bars_dow()
     {
-        let svg_DOW_bars = d3.selectAll('body').selectAll('div').select('#svg1');
+        let svg_DOW_bars = this.container.select('#svg1');
 
-        let svg_1 = d3.selectAll('body').selectAll('div').select('#svg1');
+        let svg_1 = this.container.select('#svg1');
 
 
 
@@ -170,9 +171,9 @@ class Bars {
          d3.select("#grect1").remove();
 
 
-            let g = d3.selectAll('body').selectAll('div').select('#svg1').append('g').attr("id","grect1");
+            let g = this.container.select('#svg1').append('g').attr("id","grect1");
 
-            let gBars = d3.selectAll('body').selectAll('div').select('#svg1').select('#grect1');
+            let gBars = this.container.select('#svg1').select('#grect1');
 
          //   svg_DOW_bars.selectAll("rect").data(dow_data).enter().append("rect")
             gBars.selectAll("rect").data(dow_data).enter().append("rect")
@@ -186,7 +187,7 @@ class Bars {
             ).attr('y', function(d){return 300-pickUpScale(d.value)}).attr('width',40).attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green")
            
 
-            let gTexts = d3.selectAll('body').selectAll('div').select('#svg1').select('#grect1').selectAll('text');
+            let gTexts =this.container.select('#svg1').select('#grect1').selectAll('text');
 
             console.log(dow_data);
             gTexts.data(dow_data).enter().append("text")
@@ -204,8 +205,8 @@ class Bars {
 
     bars_hourly()
     {
-        let svg_Pickup_byHours = d3.selectAll('body').selectAll('div').select('#svg2').selectAll('rect');
-        let svg_2 = d3.selectAll('body').selectAll('div').select('#svg2');
+        let svg_Pickup_byHours = this.container.select('#svg2').selectAll('rect');
+        let svg_2 = this.container.select('#svg2');
 
         console.log("in bar hourly");
         console.log(this.data);
@@ -290,9 +291,9 @@ class Bars {
              // remove old data
          d3.select("#grect2").remove();
 
-            let g = d3.selectAll('body').selectAll('div').select('#svg2').append('g').attr("transform","translate(42,0)").attr("id","grect2");
+            let g =this.container.select('#svg2').append('g').attr("transform","translate(42,0)").attr("id","grect2");
 
-            let gBars = d3.selectAll('body').selectAll('div').select('#svg2').select('#grect2').selectAll('rect');
+            let gBars =this.container.select('#svg2').select('#grect2').selectAll('rect');
 
             console.log(dow_data);
             gBars.data(dow_data).enter().append("rect")
@@ -305,7 +306,7 @@ class Bars {
            
 
 
-            let gTexts = d3.selectAll('body').selectAll('div').select('#svg2').select('#grect2').selectAll('text');
+            let gTexts =this.container.select('#svg2').select('#grect2').selectAll('text');
 
             console.log(dow_data);
 
@@ -333,8 +334,8 @@ class Bars {
 //Dow and Hours - SVG3
 dow_hourly()
 {
-    let svg_Dow_Hours = d3.selectAll('body').selectAll('div').select('#svg3').selectAll('line');
-    let svg_3 = d3.selectAll('body').selectAll('div').select('#svg3');
+    let svg_Dow_Hours = this.container.select('#svg3').selectAll('line');
+    let svg_3 =this.container.select('#svg3');
 
     
     // check total pickups per day of week - returns 7 days with total pickups per each day
@@ -407,9 +408,9 @@ dow_hourly()
         .range([min, max]);
 
         
-        let g = d3.selectAll('body').selectAll('div').select('#svg3').append('g').attr("transform","translate(0,0)").attr("id","gline3");
+        let g = this.container.select('#svg3').append('g').attr("transform","translate(0,0)").attr("id","gline3");
 
-        let gBars = d3.selectAll('body').selectAll('div').select('#svg3').selectAll("g").select('#gline3');
+        let gBars =this.container.select('#svg3').selectAll("g").select('#gline3');
 
         let lineGenerator = d3
         .line()
@@ -482,7 +483,7 @@ let newYpath = Xpath.attr("d", lineGenerator(data));
         let toHour = Math.floor(to);
         d3.select("#hour-id").remove();
 
-        let svg_1 = d3.selectAll('body').selectAll('div').select('#svg1').append('g').attr("id","hour-id");
+        let svg_1 = this.container.select('#svg1').append('g').attr("id","hour-id");
         console.log(svg_1);
         svg_1.append("text")
         .attr("x", 100)
@@ -537,7 +538,7 @@ let newYpath = Xpath.attr("d", lineGenerator(data));
         let fromDay = Math.floor(from);
         let toDay = Math.floor(to);
 
-        let hourID = d3.selectAll('body').selectAll('div').select('#svg2').append('g').attr("id","dow-id");
+        let hourID = this.container.select('#svg2').append('g').attr("id","dow-id");
          hourID.append("text")
         .attr("x", 100)
         .attr("y", 10)

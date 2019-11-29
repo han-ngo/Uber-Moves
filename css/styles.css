@@ -1,0 +1,16 @@
+.card-header.my-header-padding
+{
+    padding: .15rem 1.25rem; 
+    font-size: 0.25rem;
+}
+
+.card-body.my-body-padding
+{
+    padding: 0.25rem;
+}
+
+.col.my-col
+{
+    width: 610px;
+    flex-grow: 0;
+}
