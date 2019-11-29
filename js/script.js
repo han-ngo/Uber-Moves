@@ -82,7 +82,8 @@ d3.json("data/newyork.geojson").then(nyGeoJson => {
         weekCircularSlider.init();
         weekCircularSlider.addOnChangeListener((arr) => {
             map.filtByWeekDayArr(arr);
- 
+            bar.filtByWeekDayArr(arr);
+
         });
 
         let hourCircularSliderContainer =
@@ -94,7 +95,8 @@ d3.json("data/newyork.geojson").then(nyGeoJson => {
         hourCircularSlider.init();
         hourCircularSlider.addOnChangeListener((arr) => {
             map.filtByHourTimeArr(arr);
- 
+            bar.filtByHourTimeArr(arr);
+
         });
 
         // hour slider
@@ -119,12 +121,12 @@ d3.json("data/newyork.geojson").then(nyGeoJson => {
         let dateSlider = new BrushSlider(dateSliderContainer, new BrushConfig(400, 50, 10, 10, 1, 7, 7));
         dateSlider.onClear = () => {
             // map.filtByWeekDay(0, 6);
-            bar.filtByWeekDay(0, 6);
+           // bar.filtByWeekDay(0, 6);
 
         };
         dateSlider.onChange = (from, to) => {
             // map.filtByWeekDay(from, to);
-            bar.filtByWeekDay(from, to);
+            //bar.filtByWeekDay(from, to);
 
         };
 

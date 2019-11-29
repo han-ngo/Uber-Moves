@@ -36,7 +36,7 @@ class Bars {
 
    
 
-        d3.select("#hour-id").remove();
+        d3.selectAll("#hour-id").remove();
 
         let hourID = div.select('#svg1').append('g').attr("id","hour-id");
          hourID.append("text")
@@ -45,8 +45,8 @@ class Bars {
         .attr("dy", ".35em")
         .text("Hours: " + "00:00" +  " to " + "24:00");
 
-
-        d3.select("#dow-id").remove();
+ 
+        d3.selectAll("#dow-id").remove();
 
         let dowID = div.select('#svg2').append('g').attr("id","dow-id");
          dowID.append("text")
@@ -90,7 +90,7 @@ class Bars {
         
         this.bars_hourly();
 
-        this.dow_hourly();
+       // this.dow_hourly();
 
     }
 
@@ -205,8 +205,13 @@ class Bars {
 
             .attr('x', function(d,i) {
                 console.log("in x");
-
-                return d.key*50;
+                let position = 7;
+                if(d.key==1)
+                    {position = 7;}
+                    else
+                   { position = d.key - 1;}
+                   console.log(position);
+                return position*50 + 5;
                 }
             
             ).attr('y', function(d){return 300-pickUpScale(d.value)}).attr('width',40).attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green")
@@ -217,8 +222,13 @@ class Bars {
             console.log(dow_data);
             gTexts.data(dow_data).enter().append("text")
             .attr('x', function(d,i) {
-                
-                 return d.key*50;
+                let position = 7;
+                if(d.key==1)
+                    {position = 7;}
+                    else
+                   { position = d.key - 1;}
+                   console.log(position);
+                 return position*50;
                }
             
             ).attr('y', function(d){return  300-pickUpScale(d.value) -5})
@@ -478,7 +488,7 @@ let newYpath = Xpath.attr("d", lineGenerator(data));
 
 filtByHourTimeArr(filteredArray) {
     this.data = [];
-
+console.log("in hourtime")
     this.hourFilteredArray = filteredArray;
 
     for (let item of this.originalData) {
@@ -523,7 +533,7 @@ filtByHourTimeArr(filteredArray) {
 
     
 
-    d3.select("#hour-id").remove();
+    d3.selectAll("#hour-id").remove();
 
     let svg_1 = d3.selectAll('body').selectAll('div').select('#svg1').append('g').attr("id","hour-id");
     console.log(svg_1);
@@ -541,6 +551,7 @@ filtByHourTimeArr(filteredArray) {
 
 filtByWeekDayArr(filteredArray) {
     this.data = [];
+    console.log("in weekday")
 
     this.weekFilteredArray = filteredArray;
 
@@ -573,13 +584,21 @@ filtByWeekDayArr(filteredArray) {
          console.log(this.weekFilteredArray);
         d3.select("#dow-id").remove();
 
-         
+        let fromDay = 0;
+        let toDay = 6;
 
-        let fromDay = this.weekFilteredArray[0];
-
-    let toDay = this.weekFilteredArray[this.weekFilteredArray.length-1];
-
-    //if hours are between two days - eg:11pm to 6 am
+        if(this.weekFilteredArray.length == 0)
+         {
+             console.log("zero");
+              fromDay = 0;
+               toDay = 6;
+         }
+        else
+        { 
+             fromDay = this.weekFilteredArray[0];
+             toDay = this.weekFilteredArray[this.weekFilteredArray.length-1];
+        }
+//if hours are between two days - eg:11pm to 6 am
     for(var i=0; i<this.weekFilteredArray.length-1;i++)
 
         {
@@ -593,6 +612,9 @@ filtByWeekDayArr(filteredArray) {
                 }
          }
 
+       
+         d3.selectAll("#dow-id").remove();
+            
 
         let hourID = d3.selectAll('body').selectAll('div').select('#svg2').append('g').attr("id","dow-id");
          hourID.append("text")
@@ -612,9 +634,10 @@ filtByWeekDayArr(filteredArray) {
 
 }
 
-
+/*
     filtByHourTime(from, to) {
         this.data = [];
+        console.log("in line slider hour")
 
         for (let item of this.originalData) {
             let hour = item.date.getHours();
@@ -659,11 +682,11 @@ filtByWeekDayArr(filteredArray) {
 
         this.bars_dow();
      //   this.bars_hourly();
-    }
+    } */
 
-    filtByWeekDay(from, to) {
+  /*  filtByWeekDay(from, to) {
         this.data = [];
-        
+        console.log("in line slider week")
         for (let item of this.originalData) {
             let day = item.date.getDay();
             
@@ -718,7 +741,7 @@ filtByWeekDayArr(filteredArray) {
        
 
        this.bars_hourly();
-    }
+    }*/
 
 }
 
