@@ -38,7 +38,7 @@ d3.json("data/newyork.geojson").then(nyGeoJson => {
         let map = new GeoMap();
         AppManager.getInstance().setMap(map);
         map.update(uberData);
-
+        
         // map.onSelection((data)=>{
         //     console.log(data);
         // });
@@ -133,6 +133,14 @@ d3.json("data/newyork.geojson").then(nyGeoJson => {
         // table
         let table = new Table(uberData);
         table.createTable();
+
+        document.getElementById("preset1").onclick = (e)=>{
+            map.SetCenterAndZoom([-73.88227539062501, 40.7743300930085], 12);
+            setTimeout(()=>{
+                map.SetSelection({x: -73.88227539062501, y: 40.7743300930085});
+            }, 700);
+            hourCircularSlider.setSection(0.5, 1.0);
+        }
     });
 
 })

@@ -92,6 +92,42 @@ class GeoMap {
         this.updateMapMode();
     }
 
+    SetCenterAndZoom(posArr, zoomLevel)
+    {
+        this.map.setCenterAndZoom(posArr, zoomLevel);
+    }
+
+    SetSelection(coordinate)
+    {
+        if(this.mode != 2)
+        {
+            this.mode = 2;
+            this.updateMapMode();
+        }
+
+        let target = this.clusterLayer.identify(coordinate);
+
+        this.SetClusterNeedRedraw()
+
+        let callbackResults = [];
+        if (target.children == null) {
+            for (let callback of this.selectionCallbacks) {
+                callback(callbackResults);
+            }
+            return;
+        }
+
+        target.cluster["selected"] = true;
+
+        for (let child of target.children) {
+            callbackResults.push(this.data[child.data_index]);
+        }
+
+        for (let callback of this.selectionCallbacks) {
+            callback(callbackResults);
+        }
+    }
+
     SetClusterNeedRedraw() {
         this.clusterLayer._renderer._toRedraw = true;
     }
@@ -138,6 +174,7 @@ class GeoMap {
             }
 
             let target = this.clusterLayer.identify(e.coordinate);
+            console.log(e.coordinate);
             console.log("Click Cluster Bubble");
             console.log(target);
 
