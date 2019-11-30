@@ -490,9 +490,13 @@ svg_2.append("text")
             let highPoint=dow_data.splice(highIndex,1);
            //  console.log(highPoint);
  
+           let hgBase = 10;
+           let hgOffset = 14.375; 
+
             gTexts.data(highPoint).enter().append("text")
+            .attr("text-anchor", "middle")
             .attr('x', function(d,i) {
-                  return d.key*15 + 5;
+                  return d.key*hgOffset + hgBase;
                }
             
             ).attr('y', function(d){return  300-pickUpScale(d.value) -40})
@@ -501,7 +505,7 @@ svg_2.append("text")
             .transition().delay(1000).duration(1500)
             .style("opacity", 1.0)
             .attr('x', function(d,i) {
-                return d.key*15 + 5;
+                return d.key*hgOffset + hgBase;
              }
           
           ).attr('y', function(d){return  300-pickUpScale(d.value) -15})
