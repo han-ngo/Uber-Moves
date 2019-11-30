@@ -217,13 +217,15 @@ class Bars {
            return "translate(" + this.getBBox().this.height*-2 + "," + this.getBBox().height + ")rotate(-45)";
        });
   
+       d3.selectAll("#text1").remove();
+
       // now add titles to the axes
-      svg_1.append("text")
+      svg_1.append("text").attr("id","text1")
           .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
           .attr("transform", "translate("+ (50/4) +","+(this.height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
           .text("Pickups");
 
-      svg_1.append("text")
+      svg_1.append("text").attr("id","text1")
           .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
           .attr("transform", "translate("+ (this.width/2) +","+(this.height-(60))+")")  // centre below axis
           .text("Days of Week");
@@ -438,13 +440,14 @@ class Bars {
     return "translate(" + this.getBBox().this.height*-2 + "," + this.getBBox().height + ")rotate(-45)";
 });
 
+d3.selectAll("#text2").remove();
 // now add titles to the axes
-svg_2.append("text")
+svg_2.append("text").attr("id","text2")
    .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
    .attr("transform", "translate("+ (50/4) +","+(this.height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
    .text("Pickups");
 
-svg_2.append("text")
+svg_2.append("text").attr("id","text2")
    .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
    .attr("transform", "translate("+ (this.width/2) +","+(this.height-(60))+")")  // centre below axis
    .text("Hours of Day");
@@ -598,13 +601,16 @@ dow_hourly()
              return "translate(" + this.getBBox().this.height*-2 + "," + this.getBBox().height + ")rotate(-45)";
          });
     
+         d3.selectAll("#text3").remove();
+
+
         // now add titles to the axes
-        svg_3.append("text")
+        svg_3.append("text").attr("id","text3")
             .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
             .attr("transform", "translate("+ (50/4) +","+(this.height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
             .text("Pickups");
   
-        svg_3.append("text")
+        svg_3.append("text").attr("id","text3")
             .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
             .attr("transform", "translate("+ (this.width/2) +","+(this.height-(60))+")")  // centre below axis
             .text("Hours of Day");
@@ -792,7 +798,7 @@ filtByWeekDayArr(filteredArray) {
          hourID.append("text")
         .attr("x", 100)
         .attr("y", 10)
-        .attr("dy", ".35em")
+        .attr("dy", ".45em")
         .text(function(){
             if(fromDay!=toDay)
             return "Days: " + dow[fromDay].day +  " to " + dow[toDay].day;
