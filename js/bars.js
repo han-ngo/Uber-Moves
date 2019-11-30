@@ -147,7 +147,7 @@ class Bars {
        {day:"Sunday"}
         ];
 
-        console.log(this.data);
+        //console.log(this.data);
         
       
 
@@ -160,12 +160,12 @@ class Bars {
             .entries(this.data);
     
             var dow_data= nested_data;
-            console.log(dow_data);
+           // console.log(dow_data);
             dow_data.sort(function(x, y){
                 return d3.ascending(x.key, y.key);
              })
             
-             console.log(dow_data);
+            // console.log(dow_data);
                 //get max of all pickup count values per dow_hourly
             let max = d3.max(dow_data, function(d,i) 
             {
@@ -179,8 +179,8 @@ class Bars {
                         {return d.value}
             });
 
-            console.log(min);
-            console.log(max);
+        //    console.log(min);
+         //   console.log(max);
 
              // remove old axis
          d3.select("#xAxis1").remove();
@@ -224,7 +224,7 @@ class Bars {
             .domain([0, max])
             .range([0, 250]);
     
-            console.log(dow_data);
+      //      console.log(dow_data);
 
              // remove old data
          d3.select("#grect1").remove();
@@ -238,13 +238,13 @@ class Bars {
             gBars.selectAll("rect").data(dow_data).enter().append("rect")
 
             .attr('x', function(d,i) {
-                console.log("in x");
+          //      console.log("in x");
                 let position = 7;
                 if(d.key==1)
                     {position = 7;}
                     else
                    { position = d.key - 1;}
-                   console.log(position);
+           //        console.log(position);
                 return position*50 + 5;
                 }
             
@@ -253,7 +253,7 @@ class Bars {
 
             let gTexts =this.container.select('#svg1').select('#grect1').selectAll('text');
 
-            console.log(dow_data);
+         //   console.log(dow_data);
             gTexts.data(dow_data).enter().append("text")
             .attr('x', function(d,i) {
                 let position = 7;
@@ -261,7 +261,7 @@ class Bars {
                     {position = 7;}
                     else
                    { position = d.key - 1;}
-                   console.log(position);
+            //       console.log(position);
                  return position*50;
                }
             
@@ -277,8 +277,8 @@ class Bars {
         let svg_Pickup_byHours = this.container.select('#svg2').selectAll('rect');
         let svg_2 = this.container.select('#svg2');
 
-        console.log("in bar hourly");
-        console.log(this.data);
+      //  console.log("in bar hourly");
+      //  console.log(this.data);
 
     
 
@@ -291,7 +291,7 @@ class Bars {
             })
             .entries(this.data);
     
-            console.log(nested_data[1]);
+        //    console.log(nested_data[1]);
             var dow_data= nested_data;
  
             dow_data.sort(function(x, y){
@@ -315,8 +315,8 @@ class Bars {
        });
 
     
-console.log(min);
-console.log(max);
+//console.log(min);
+//console.log(max);
 
 
             //clear bars
@@ -383,12 +383,12 @@ console.log(max);
 
             let gBars =this.container.select('#svg2').select('#grect2').selectAll('rect');
 
-            console.log(dow_data[0]);
-            console.log(dow_data[1]);
+           // console.log(dow_data[0]);
+           // console.log(dow_data[1]);
             
             gBars.data(dow_data).enter().append("rect")
             .attr('x', function(d,i) {
-                console.log(d.key)
+             //   console.log(d.key)
                  return d.key*14 + 11;
                }
             
@@ -401,7 +401,7 @@ console.log(max);
 
             let gTexts =this.container.select('#svg2').select('#grect2').selectAll('text');
 
-            console.log(dow_data);
+          //  console.log(dow_data);
 
             let highIndex =  d3.maxIndex(dow_data, function(d,i) 
             {
@@ -409,7 +409,7 @@ console.log(max);
             });
 
             let highPoint=dow_data.splice(highIndex,1);
-             console.log(highPoint);
+           //  console.log(highPoint);
  
             gTexts.data(highPoint).enter().append("text")
             .attr('x', function(d,i) {
@@ -499,7 +499,7 @@ dow_hourly()
            .attr("transform", "translate(50," + 0 + ")")
            .call(y_axis);
 
-           console.log(min + " " + max)
+           //console.log(min + " " + max)
         var pickUpScale = d3.scaleLinear()
         .domain([min, max])
         .range([0,250]);
@@ -514,7 +514,7 @@ dow_hourly()
         let lineGenerator = d3
         .line()
         .x((d, i) =>  d.key*14 + 50)
-        .y(function(d) {console.log(pickUpScale(d.value)); return 300-pickUpScale(d.value)});
+        .y(function(d) { return 300-pickUpScale(d.value)});
 
         let color =["green","red","brown","orange","black","blue","pink"];
 
@@ -525,7 +525,7 @@ dow_hourly()
                 return d3.ascending(parseInt(x.key), parseInt(y.key));
              })
 
-console.log(data)
+//console.log(data)
 
 let Xpath= d3.selectAll("#svg3").select("#gline3").append('path').attr("opacity",1)
 .attr("transform","translate(0,0)")
@@ -548,7 +548,7 @@ let newYpath = Xpath.attr("d", lineGenerator(data));
 
 filtByHourTimeArr(filteredArray) {
     this.data = [];
-console.log("in hourtime")
+//console.log("in hourtime")
     this.hourFilteredArray = filteredArray;
 
     for (let item of this.originalData) {
@@ -568,7 +568,7 @@ console.log("in hourtime")
         }
     }
 
-    console.log(this.hourFilteredArray);
+    //console.log(this.hourFilteredArray);
     let data =[1];
 
     let fromHour = this.hourFilteredArray[0];
@@ -596,7 +596,7 @@ console.log("in hourtime")
     d3.selectAll("#hour-id").remove();
 
     let svg_1 = d3.selectAll('body').selectAll('div').select('#svg1').append('g').attr("id","hour-id");
-    console.log(svg_1);
+    //console.log(svg_1);
     svg_1.append("text")
     .attr("x", 100)
     .attr("y", 10)
@@ -612,7 +612,7 @@ console.log("in hourtime")
 
 filtByWeekDayArr(filteredArray) {
     this.data = [];
-    console.log("in weekday")
+    //console.log("in weekday")
 
     this.weekFilteredArray = filteredArray;
 
@@ -642,7 +642,7 @@ filtByWeekDayArr(filteredArray) {
         {day:"Sunday"}
          ];
 
-         console.log(this.weekFilteredArray);
+        // console.log(this.weekFilteredArray);
         d3.select("#dow-id").remove();
 
         let fromDay = 0;
@@ -650,7 +650,7 @@ filtByWeekDayArr(filteredArray) {
 
         if(this.weekFilteredArray.length == 0)
          {
-             console.log("zero");
+            // console.log("zero");
               fromDay = 0;
                toDay = 6;
          }
