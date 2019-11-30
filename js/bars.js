@@ -259,7 +259,6 @@ class Bars {
 
           
              .attr('x', function(d,i) {
-
           //      console.log("in x");
                 let position = 7;
                 if(d.key==1)
@@ -270,18 +269,44 @@ class Bars {
                 return position*50 + 5;
                 }
             
-            ).attr('y', function(d){return 300-pickUpScale(d.value)}).attr('width',40)
-             .attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green");
-           
-             rect.transition().duration(750)
-             .attr("delay", function(d,i){return 1000*i})
-             .attr("duration", function(d,i){return 1000*(i+5)})
-             .attr('y', function(d){return 300-pickUpScale(d.value)})
+            ).attr('y', function(d){return 300})
+             .attr('height',function(d){return 0}).attr("fill","green")
+            
+           .transition()
+              .duration(2000)
+              .attr('x', function(d,i) {
+
+                //      console.log("in x");
+                      let position = 7;
+                      if(d.key==1)
+                          {position = 7;}
+                          else
+                         { position = d.key - 1;}
+                 //        console.log(position);
+                      return position*50 + 5;
+                      }
+                  
+                  ).attr('y', function(d){return 300-pickUpScale(d.value)}).attr('width',40)
+                   .attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green");
+          
 
             let gTexts =this.container.select('#svg1').select('#grect1').selectAll('text');
 
          //   console.log(dow_data);
             gTexts.data(dow_data).enter().append("text")
+            .attr('x', function(d,i) {
+                let position = 7;
+                if(d.key==1)
+                    {position = 7;}
+                    else
+                   { position = d.key - 1;}
+            //       console.log(position);
+                 return position*50;
+               }
+            
+            ).attr('y', function(d){return  300-pickUpScale(d.value) - 30 })
+            .attr("dy", ".120em")
+            .transition().delay(1000).duration(1500)
             .attr('x', function(d,i) {
                 let position = 7;
                 if(d.key==1)
@@ -435,11 +460,12 @@ svg_2.append("text")
                  return d.key*14 + 11;
                }
             
-            ).attr('y', function(d){return  300-pickUpScale(d.value)})
-            .attr('width',200/24).attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green")
+            ).attr('y', function(d){return  300})
+            .attr('width',200/24).attr('height', 0).attr("fill","green")
             .transition()
-            .duration(750)
-           
+            .duration(2000)
+            .attr('y', function(d){return  300-pickUpScale(d.value)})
+            .attr('width',200/24).attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green")
 
 
             let gTexts =this.container.select('#svg2').select('#grect2').selectAll('text');
@@ -459,9 +485,15 @@ svg_2.append("text")
                   return d.key*15 + 5;
                }
             
-            ).attr('y', function(d){return  300-pickUpScale(d.value) -15})
+            ).attr('y', function(d){return  300-pickUpScale(d.value) -40})
             .attr("dy", ".75em")
- 
+            .transition().delay(1000).duration(1500)
+            .attr('x', function(d,i) {
+                return d.key*15 + 5;
+             }
+          
+          ).attr('y', function(d){return  300-pickUpScale(d.value) -15})
+          .attr("dy", ".75em")
              .text(function(d) { return d.value; });   	  
 
      
