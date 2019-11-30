@@ -78,7 +78,7 @@ class GeoMap {
                         this.updateMapMode();
                     }
                 }, {
-                    item: 'HeatMap',
+                    item: 'Heat',
                     click: () => {
                         this.mode = 1;
                         this.updateMapMode();
