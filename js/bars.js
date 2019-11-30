@@ -271,6 +271,7 @@ class Bars {
             
             ).attr('y', function(d){return 300})
              .attr('height',function(d){return 0}).attr("fill","green")
+             .attr('width',40)
             
            .transition()
               .duration(2000)
@@ -286,7 +287,7 @@ class Bars {
                       return position*50 + 5;
                       }
                   
-                  ).attr('y', function(d){return 300-pickUpScale(d.value)}).attr('width',40)
+                  ).attr('y', function(d){return 300-pickUpScale(d.value)})
                    .attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green");
           
 
