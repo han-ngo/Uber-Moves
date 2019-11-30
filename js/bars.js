@@ -55,8 +55,8 @@ class Bars {
         .attr("dy", ".35em")
         .text("Days: " + "Monday" +  " to " + "Sunday");
        
-        let color =["green","red","brown","orange","black","blue","yellow"];
-        let dow =["green","red","brown","orange","black","blue","yellow"];
+        //let color =["green","red","brown","orange","black","blue","pink"];
+        let dow =["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 
  
         let dowLegend = div.select('#svg3').append('g').attr("id","dow");
@@ -65,6 +65,39 @@ class Bars {
         .attr("y", 10)
         .attr("width", 10)
         .attr("height", 10)
+
+        dowLegend.selectAll("text").data(dow)
+
+        .append("text")
+        .attr("x", (d,i)=> 60 + i * 10)
+        .attr("y", 10)
+        .attr("dy", ".35em")
+        .text((d,i)=> dow[i]);
+
+        d3.selectAll("#dow-hour-id").remove();
+            
+        
+
+        let color =["green","red","brown","orange","black","blue","pink"];
+         let dow_hour_ID = d3.selectAll('body').selectAll('div').select('#svg3').append('g').attr("id","dow-hour-id").selectAll("rect");
+   /*      dow_hour_ID.data(dow).enter().append("rect")
+        .attr("x", (d,i) => 60 + i*45)
+        .attr("y", 10)
+        .attr("width", "10")
+        .attr("height", "10")
+        .attr("fill", (d,i)=>color[i]);*/
+
+        dow_hour_ID = d3.selectAll('body').selectAll('div').select('#svg3').select("#dow-hour-id").selectAll("text");
+
+        dow_hour_ID.data(dow).enter().append("text")
+
+         .attr("x", (d,i)=> 70 + i * 45)
+        .attr("y", 10)
+        .attr("dy", ".35em")
+        .text((d,i)=> dow[i])
+        .style('fill', (d,i)=>color[i]);
+
+
 
         AppManager.getInstance().getMap().onSelection((data)=>{
             if(data == null || data.length == 0)
@@ -483,7 +516,7 @@ dow_hourly()
         .x((d, i) =>  d.key*14 + 50)
         .y(function(d) {console.log(pickUpScale(d.value)); return 300-pickUpScale(d.value)});
 
-        let color =["green","red","brown","orange","black","blue","yellow"];
+        let color =["green","red","brown","orange","black","blue","pink"];
 
     for(var i=0;i<dow_data.length;i++)
         {
@@ -656,6 +689,41 @@ filtByWeekDayArr(filteredArray) {
             return "Days: " + dow[fromDay].day +  " Only"; 
             });
        
+   /*         d3.selectAll("#dow-hour-id").remove();
+            
+            var dow = [{day:"Mon"},
+            {day:"Tue"},
+            {day:"Wed"},
+            {day:"Thu"},
+            {day:"Fri"},
+            {day:"Sat"},
+            {day:"Sun"}
+             ];
+
+            let color =["green","red","brown","orange","black","blue","pink"];
+             let dow_hour_ID = d3.selectAll('body').selectAll('div').select('#svg3').append('g').attr("id","dow-hour-id").selectAll("rect");
+            dow_hour_ID.data(dow).enter().append("rect")
+            .attr("x", (d,i) => 60 + i*45)
+            .attr("y", 10)
+            .attr("width", "10")
+            .attr("height", "10")
+            .attr("fill", (d,i)=>color[i]);
+            
+
+            dow_hour_ID = d3.selectAll('body').selectAll('div').select('#svg3').select("#dow-hour-id").selectAll("text");
+
+            dow_hour_ID.data(dow).enter().append("text")
+    
+             .attr("x", (d,i)=> 70 + i * 45)
+            .attr("y", 10)
+            .attr("dy", ".35em")
+            .text((d,i)=> dow[i])
+            .style('fill', (d,i)=>color[i])*/
+
+
+             
+       
+                
             this.bars_dow();
 
        this.bars_hourly();
