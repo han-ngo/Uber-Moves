@@ -90,7 +90,7 @@ class Bars {
         
         this.bars_hourly();
 
-       // this.dow_hourly();
+        this.dow_hourly();
 
     }
 
@@ -403,15 +403,15 @@ dow_hourly()
          //get max of all pickup count values per dow_hourly
          let max = d3.max(dow_data, function(d,i) 
                         {
-                            return d.value;
+                            return (d3.max(d.values,d=>d.value));
+
                         });
 
                          //get max of all pickup count values per dow_hourly
          let min = d3.min(dow_data, function(d,i) 
          {
-             //console.log(d3.max(d.values,d=>d.value));
-             return d.value;
-
+             return (d3.min(d.values,d=>d.value));
+ 
          });
                     
         //clear bars
@@ -425,9 +425,9 @@ dow_hourly()
         //add bars
          
          // remove old axis
-         d3.select("#xAxis3").remove();
+         d3.selectAll("#xAxis3").remove();
 
-         d3.select("#yAxis3").remove();
+         d3.selectAll("#yAxis3").remove();
 
            // Create scale
            var xScale = d3.scaleLinear()
@@ -453,9 +453,12 @@ dow_hourly()
            .attr("transform", "translate(50," + 0 + ")")
            .call(y_axis);
 
+           console.log(min + " " + max)
         var pickUpScale = d3.scaleLinear()
-        .domain([0, max])
-        .range([min, max]);
+        .domain([min, max])
+        .range([0,250]);
+
+        //.range([min, max]);
 
         
         let g = this.container.select('#svg3').append('g').attr("transform","translate(0,0)").attr("id","gline3");
@@ -465,7 +468,7 @@ dow_hourly()
         let lineGenerator = d3
         .line()
         .x((d, i) =>  d.key*14 + 50)
-        .y(d => 300-pickUpScale(d.value));
+        .y(function(d) {console.log(pickUpScale(d.value)); return 300-pickUpScale(d.value)});
 
         let color =["green","red","brown","orange","black","blue","yellow"];
 
@@ -476,10 +479,12 @@ dow_hourly()
                 return d3.ascending(parseInt(x.key), parseInt(y.key));
              })
 
+console.log(data)
+
 let Xpath= d3.selectAll("#svg3").select("#gline3").append('path').attr("opacity",1)
 .attr("transform","translate(0,0)")
 //.attr("stroke", "#086fad")
-.attr("stroke-width", "0.5")
+.attr("stroke-width", "1.5")
 .attr("fill", "none")
 .attr("stroke",color[i]);
 
@@ -556,6 +561,7 @@ console.log("in hourtime")
     this.bars_dow();
     this.bars_hourly();
 
+    this.dow_hourly();
 }
 
 filtByWeekDayArr(filteredArray) {
@@ -640,6 +646,7 @@ filtByWeekDayArr(filteredArray) {
             this.bars_dow();
 
        this.bars_hourly();
+       this.dow_hourly();
 
 }
 
