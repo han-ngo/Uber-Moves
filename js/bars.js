@@ -255,9 +255,11 @@ class Bars {
             let gBars = this.container.select('#svg1').select('#grect1');
 
          //   svg_DOW_bars.selectAll("rect").data(dow_data).enter().append("rect")
-            gBars.selectAll("rect").data(dow_data).enter().append("rect")
+         let rect =  gBars.selectAll("rect").data(dow_data).enter().append("rect")
 
-            .attr('x', function(d,i) {
+          
+             .attr('x', function(d,i) {
+
           //      console.log("in x");
                 let position = 7;
                 if(d.key==1)
@@ -268,8 +270,13 @@ class Bars {
                 return position*50 + 5;
                 }
             
-            ).attr('y', function(d){return 300-pickUpScale(d.value)}).attr('width',40).attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green")
+            ).attr('y', function(d){return 300-pickUpScale(d.value)}).attr('width',40)
+             .attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green");
            
+             rect.transition().duration(750)
+             .attr("delay", function(d,i){return 1000*i})
+             .attr("duration", function(d,i){return 1000*(i+5)})
+             .attr('y', function(d){return 300-pickUpScale(d.value)})
 
             let gTexts =this.container.select('#svg1').select('#grect1').selectAll('text');
 
