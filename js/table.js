@@ -47,6 +47,7 @@ class Table {
           movableColumns: true, //allow column order to be changed
           resizableRows: true, //allow row order to be changed
           groupBy: "District",
+          groupStartOpen: false,
           initialSort: [
             //set the initial sort order of the data
             { column: "District", dir: "asc" }
