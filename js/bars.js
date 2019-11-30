@@ -46,7 +46,8 @@ class Bars {
         .text("Hours: " + "00:00" +  " to " + "24:00");
 
  
-        d3.selectAll("#dow-id").remove();
+        //d3.selectAll("#dow-id").remove();
+        d3.select("#svg2").html("");
 
         let dowID = div.select('#svg2').append('g').attr("id","dow-id");
          dowID.append("text")
@@ -58,7 +59,8 @@ class Bars {
         //let color =["green","red","brown","orange","black","blue","pink"];
         let dow =["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 
- 
+        d3.selectAll("#dow").remove();
+
         let dowLegend = div.select('#svg3').append('g').attr("id","dow");
         dowLegend.selectAll("rect").data(dow).append("rect")
         .attr("x", (d,i)=> 50 + i * 10)
@@ -79,7 +81,7 @@ class Bars {
         
 
         let color =["#7bc0e4","#c96367","#cb85ab","#5d5d5d","#c0b987","#f5c987","#d94b4d"];
-         let dow_hour_ID = d3.selectAll('body').selectAll('div').select('#svg3').append('g').attr("id","dow-hour-id").selectAll("rect");
+         let dow_hour_ID = d3.selectAll('body').select('#svg3').append('g').attr("id","dow-hour-id").selectAll("rect");
    /*      dow_hour_ID.data(dow).enter().append("rect")
         .attr("x", (d,i) => 60 + i*45)
         .attr("y", 10)
@@ -87,7 +89,7 @@ class Bars {
         .attr("height", "10")
         .attr("fill", (d,i)=>color[i]);*/
 
-        dow_hour_ID = d3.selectAll('body').selectAll('div').select('#svg3').select("#dow-hour-id").selectAll("text");
+        dow_hour_ID = d3.selectAll('body').select('#svg3').select("#dow-hour-id").selectAll("text");
 
         dow_hour_ID.data(dow).enter().append("text")
 
@@ -521,9 +523,9 @@ svg_2.append("text").attr("id","text2")
 //Dow and Hours - SVG3
 dow_hourly()
 {
-    let svg_Dow_Hours = d3.selectAll('body').selectAll('div').select('#svg3').select("#gline3").selectAll('path');
+    let svg_Dow_Hours = d3.selectAll('body').select('#svg3').select("#gline3").selectAll('path');
  
-    let svg_3 = d3.selectAll('body').selectAll('div').select('#svg3');
+    let svg_3 = d3.selectAll('body').select('#svg3');
 
     
     // check total pickups per day of week - returns 7 days with total pickups per each day
@@ -712,13 +714,14 @@ filtByHourTimeArr(filteredArray) {
 
     d3.selectAll("#hour-id").remove();
 
-    let svg_1 = d3.selectAll('body').selectAll('div').select('#svg1').append('g').attr("id","hour-id");
+    let svg_1 = d3.selectAll('body').select('#svg1').append('g').attr("id","hour-id");
     //console.log(svg_1);
     svg_1.append("text")
     .attr("x", 100)
     .attr("y", 10)
     .attr("dy", ".35em")
     .text("Hours: " + fromHour + ":00" +  " to " + toHour + ":00");
+    
     
 
     this.bars_dow();
@@ -760,7 +763,11 @@ filtByWeekDayArr(filteredArray) {
          ];
 
         // console.log(this.weekFilteredArray);
-        d3.select("#dow-id").remove();
+        // d3.selectAll("#dow-id").remove();
+        // while(d3.selectAll("#dow-id") != null)
+        {
+            d3.selectAll("#svg2").html("");
+        }
 
         let fromDay = 0;
         let toDay = 6;
@@ -792,9 +799,9 @@ filtByWeekDayArr(filteredArray) {
 
        
          d3.selectAll("#dow-id").remove();
-            
+         d3.select("#svg2").html("");   
 
-        let hourID = d3.selectAll('body').selectAll('div').select('#svg2').append('g').attr("id","dow-id");
+        let hourID = d3.selectAll('body').select('#svg2').append('g').attr("id","dow-id");
          hourID.append("text")
         .attr("x", 100)
         .attr("y", 10)
