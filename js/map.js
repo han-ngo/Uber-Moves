@@ -61,30 +61,38 @@ class GeoMap {
         new maptalks.control.Toolbar({
             'vertical': true,
             'position': 'top-right',
-            'items': [{
-                item: 'Map Mode',
-                click: function () {
+            'items': [
+                {
+                    item: 'Reset',
+                    click: () => {
+                        // 
+                        this.SetCenterAndZoom([-73.82736212158204, 40.77890381880605], 11);
+                    },
                 },
-                children: [{
-                    item: 'Cluster',
-                    click: () => {
-                        this.mode = 2;
-                        this.updateMapMode();
-                    }
-                }, {
-                    item: 'Circle',
-                    click: () => {
-                        this.mode = 0;
-                        this.updateMapMode();
-                    }
-                }, {
-                    item: 'Heat',
-                    click: () => {
-                        this.mode = 1;
-                        this.updateMapMode();
-                    }
-                }]
-            },]
+                {
+                    item: 'Map Mode',
+                    click: function () {
+                    },
+                    children: [{
+                        item: 'Cluster',
+                        click: () => {
+                            this.mode = 2;
+                            this.updateMapMode();
+                        }
+                    }, {
+                        item: 'Circle',
+                        click: () => {
+                            this.mode = 0;
+                            this.updateMapMode();
+                        }
+                    }, {
+                        item: 'Heat',
+                        click: () => {
+                            this.mode = 1;
+                            this.updateMapMode();
+                        }
+                    }]
+                },]
         })
             .addTo(map);
 
@@ -92,15 +100,12 @@ class GeoMap {
         this.updateMapMode();
     }
 
-    SetCenterAndZoom(posArr, zoomLevel)
-    {
+    SetCenterAndZoom(posArr, zoomLevel) {
         this.map.setCenterAndZoom(posArr, zoomLevel);
     }
 
-    SetSelection(coordinate)
-    {
-        if(this.mode != 2)
-        {
+    SetSelection(coordinate) {
+        if (this.mode != 2) {
             this.mode = 2;
             this.updateMapMode();
         }
