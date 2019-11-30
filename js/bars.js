@@ -191,7 +191,7 @@ class Bars {
          // Create scale
         var xScale = d3.scaleBand()
         .domain(dow.map(function(d){ return d.day}))
-        .range([0, this.width*0.85])
+        .range([0, this.width*0.875])
         // Add scales to axis
         var x_axis = d3.axisBottom()
         .scale(xScale).ticks(7);
@@ -291,10 +291,13 @@ class Bars {
                    .attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green");
           
 
+                   const gBase = 75;
+                   const gtOffset = 50;
             let gTexts =this.container.select('#svg1').select('#grect1').selectAll('text');
 
          //   console.log(dow_data);
             gTexts.data(dow_data).enter().append("text")
+            .attr("text-anchor", "middle")
             .attr('x', function(d,i) {
                 let position = 7;
                 if(d.key==1)
@@ -302,12 +305,14 @@ class Bars {
                     else
                    { position = d.key - 1;}
             //       console.log(position);
-                 return position*50;
+                 return gBase + (position - 1)*gtOffset;
                }
             
             ).attr('y', function(d){return  300-pickUpScale(d.value) - 30 })
             .attr("dy", ".120em")
+            .style("opacity", 0)
             .transition().delay(1000).duration(1500)
+            .style("opacity", 1.0)
             .attr('x', function(d,i) {
                 let position = 7;
                 if(d.key==1)
@@ -315,7 +320,7 @@ class Bars {
                     else
                    { position = d.key - 1;}
             //       console.log(position);
-                 return position*50;
+                 return gBase + (position - 1)*gtOffset;
                }
             
             ).attr('y', function(d){return  300-pickUpScale(d.value) -5})
@@ -402,9 +407,13 @@ class Bars {
          .domain(hours.map(function(d){ return d.hour}))
          .range([0, this.width*0.85])
 
+         var fakeXScale = d3.scaleLinear()
+         .domain([0, 23])
+         .range([6, this.width*0.8225]);
+
           // Add scales to axis
           var x_axis = d3.axisBottom()
-          .scale(xScale).ticks(24);
+          .scale(fakeXScale).ticks(24);
           //Append group and insert axis
           svg_2.append("g").attr("id","xAxis2")
           .attr("transform", "translate(50," + 300 + ")")
@@ -488,7 +497,9 @@ svg_2.append("text")
             
             ).attr('y', function(d){return  300-pickUpScale(d.value) -40})
             .attr("dy", ".75em")
+            .style("opacity", 0.0)
             .transition().delay(1000).duration(1500)
+            .style("opacity", 1.0)
             .attr('x', function(d,i) {
                 return d.key*15 + 5;
              }
@@ -554,7 +565,7 @@ dow_hourly()
            // Create scale
            var xScale = d3.scaleLinear()
            .domain([0,23])
-           .range([0, width*0.85])
+           .range([0, width*0.8225])
            // Add scales to axis
            var x_axis = d3.axisBottom()
            .scale(xScale).ticks(23);
