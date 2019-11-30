@@ -99,37 +99,6 @@ d3.json("data/newyork.geojson").then(nyGeoJson => {
 
         });
 
-        // hour slider
-        let hourSliderContainer = d3.select("body").append("div")
-            .attr("id", 'hourSlider');
-        let hourSlider = new BrushSlider(hourSliderContainer, new BrushConfig());
-        hourSlider.onClear = () => {
-            // map.filtByHourTime(0, 24);
-           // bar.filtByHourTime(0, 24);
-
-        };
-        hourSlider.onChange = (from, to) => {
-            // map.filtByHourTime(from, to);
-            //bar.filtByHourTime(from, to);
-
-        };
-
-        // date slider
-        let dateSliderContainer = d3.select("body").append("div")
-            .attr("id", 'dateSlider');
-        // from 1 = sunday to 7 = saturday
-        let dateSlider = new BrushSlider(dateSliderContainer, new BrushConfig(400, 50, 10, 10, 1, 7, 7));
-        dateSlider.onClear = () => {
-            // map.filtByWeekDay(0, 6);
-           // bar.filtByWeekDay(0, 6);
-
-        };
-        dateSlider.onChange = (from, to) => {
-            // map.filtByWeekDay(from, to);
-            //bar.filtByWeekDay(from, to);
-
-        };
-
         // table
         let table = new Table(uberData);
         table.createTable();

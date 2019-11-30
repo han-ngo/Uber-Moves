@@ -20,3 +20,7 @@
     flex-grow: 0;
     flex-basis: auto;
 }
+.card.my-card
+{
+    width: 100%;
+}

@@ -23,7 +23,7 @@ class GeoMap {
         d3.select("#mapContainer").append("div")
             .attr("id", MAP_CONTAINER)
             .style("width", "100%")
-            .style("height", "600px");
+            .style("height", "520px");
 
         var map = new maptalks.Map(MAP_CONTAINER, {
             center: [-73.3, 40.769],
