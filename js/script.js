@@ -103,33 +103,41 @@ d3.json("data/newyork.geojson").then(nyGeoJson => {
         let table = new Table(uberData);
         table.createTable();
         
+        // West Village
+        let preset1Coord = { x: -74.00159841918946, y: 40.73340256575554 };
         document.getElementById("preset1").onclick = (e)=>{
-            map.SetCenterAndZoom([-73.88227539062501, 40.7743300930085], 12);
+            map.SetCenterAndZoom([preset1Coord.x, preset1Coord.y], 13);
             setTimeout(()=>{
-                map.SetSelection({x: -73.88227539062501, y: 40.7743300930085});
-            }, 700);
-            hourCircularSlider.setSection(0.5, 1.0);
+                map.SetSelection(preset1Coord);
+            }, 1500);
+            // from 21 to 3
+            hourCircularSlider.setSection((2.0 * Math.PI / 24) * 21, (2.0 * Math.PI / 24) * 3);
+            // from Fri to Sun
+            weekCircularSlider.setSection((2.0 * Math.PI / 7) * 4, (2.0 * Math.PI / 7) * 7);
         }
-
-        let preset2Coord = {x: -73.973059715271, y: 40.75855756555458};
+        // Upper East Side
+        let preset2Coord = { x: -73.95318991088868, y: 40.77387674487554 };
         document.getElementById("preset2").onclick = (e)=>{
-            map.SetCenterAndZoom([preset2Coord.x, preset2Coord.y], 14);
+            map.SetCenterAndZoom([preset2Coord.x, preset2Coord.y], 13);
             setTimeout(()=>{
                 map.SetSelection(preset2Coord);
-            }, 700);
-            
-            // // from 5 to 10
-            // hourCircularSlider.setSection((2.0 * Math.PI / 24) * 5, (2.0 * Math.PI / 24) * 10);
-            // // from Mon to Wes
-            // weekCircularSlider.setSection((2.0 * Math.PI / 7) * 0, (2.0 * Math.PI / 7) * 3);
+            }, 1500);
+            // from 6 to 10
+            hourCircularSlider.setSection((2.0 * Math.PI / 24) * 6, (2.0 * Math.PI / 24) * 11);
+            // from Mon to Fri
+            weekCircularSlider.setSection((2.0 * Math.PI / 7) * 0, (2.0 * Math.PI / 7) * 5);
         }
-
-        let preset3Coord = {x: -74.0007401123047, y: 40.749231472225716};
+        // Midtown Center
+        let preset3Coord = { x: -73.97280222320558, y: 40.7587607338547};
         document.getElementById("preset3").onclick = (e)=>{
-            map.SetCenterAndZoom([preset3Coord.x, preset3Coord.y], 13);
+            map.SetCenterAndZoom([preset3Coord.x, preset3Coord.y], 14);
             setTimeout(()=>{
                 map.SetSelection(preset3Coord);
-            }, 700);
+            }, 1500);
+            // from 15 to 20
+            hourCircularSlider.setSection((2.0 * Math.PI / 24) * 15, (2.0 * Math.PI / 24) * 20);
+            // from Mon to Fri
+            weekCircularSlider.setSection((2.0 * Math.PI / 7) * 0, (2.0 * Math.PI / 7) * 5);
         }
     });
 
