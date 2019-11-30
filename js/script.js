@@ -110,6 +110,23 @@ d3.json("data/newyork.geojson").then(nyGeoJson => {
             }, 700);
             hourCircularSlider.setSection(0.5, 1.0);
         }
+
+        let preset2Coord = {x: -73.973059715271, y: 40.75855756555458};
+        document.getElementById("preset2").onclick = (e)=>{
+            map.SetCenterAndZoom([preset2Coord.x, preset2Coord.y], 14);
+            setTimeout(()=>{
+                map.SetSelection(preset2Coord);
+            }, 700);
+            // hourCircularSlider.setSection(1.6, 2.74);
+        }
+
+        let preset3Coord = {x: -74.0007401123047, y: 40.749231472225716};
+        document.getElementById("preset3").onclick = (e)=>{
+            map.SetCenterAndZoom([preset3Coord.x, preset3Coord.y], 13);
+            setTimeout(()=>{
+                map.SetSelection(preset3Coord);
+            }, 700);
+        }
     });
 
 })
