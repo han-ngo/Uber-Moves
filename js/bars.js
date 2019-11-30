@@ -78,7 +78,7 @@ class Bars {
             
         
 
-        let color =["green","red","brown","orange","black","blue","pink"];
+        let color =["#7bc0e4","#c96367","#cb85ab","#5d5d5d","#c0b987","#f5c987","#d94b4d"];
          let dow_hour_ID = d3.selectAll('body').selectAll('div').select('#svg3').append('g').attr("id","dow-hour-id").selectAll("rect");
    /*      dow_hour_ID.data(dow).enter().append("rect")
         .attr("x", (d,i) => 60 + i*45)
@@ -270,7 +270,7 @@ class Bars {
                 }
             
             ).attr('y', function(d){return 300})
-             .attr('height',function(d){return 0}).attr("fill","green")
+             .attr('height',function(d){return 0}).attr("fill","#00b894")
              .attr('width',40)
             
            .transition()
@@ -288,7 +288,7 @@ class Bars {
                       }
                   
                   ).attr('y', function(d){return 300-pickUpScale(d.value)})
-                   .attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green");
+                   .attr('height',function(d){return pickUpScale(d.value)}).attr("fill","#00b894");
           
 
                    const gBase = 75;
@@ -471,11 +471,11 @@ svg_2.append("text")
                }
             
             ).attr('y', function(d){return  300})
-            .attr('width',200/24).attr('height', 0).attr("fill","green")
+            .attr('width',200/24).attr('height', 0).attr("fill","#00b894")
             .transition()
             .duration(2000)
             .attr('y', function(d){return  300-pickUpScale(d.value)})
-            .attr('width',200/24).attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green")
+            .attr('width',200/24).attr('height',function(d){return pickUpScale(d.value)}).attr("fill","#00b894")
 
 
             let gTexts =this.container.select('#svg2').select('#grect2').selectAll('text');
@@ -627,7 +627,7 @@ dow_hourly()
         .x((d, i) =>  d.key*14 + 50)
         .y(function(d) { return 300-pickUpScale(d.value)});
 
-        let color =["green","red","brown","orange","black","blue","pink"];
+        let color =["#7bc0e4","#c96367","#cb85ab","#5d5d5d","#c0b987","#f5c987","#d94b4d"];
 
     for(var i=0;i<dow_data.length;i++)
         {
