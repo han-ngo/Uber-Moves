@@ -212,6 +212,26 @@ class Bars {
         .attr("transform", "translate(50," + 0 + ")")
         .call(y_axis);
 
+        svg_1.selectAll(".xaxis text")  // select all the text elements for the xaxis
+        .attr("transform", function(d) {
+           return "translate(" + this.getBBox().this.height*-2 + "," + this.getBBox().height + ")rotate(-45)";
+       });
+  
+      // now add titles to the axes
+      svg_1.append("text")
+          .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+          .attr("transform", "translate("+ (50/4) +","+(this.height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+          .text("Pickups");
+
+      svg_1.append("text")
+          .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+          .attr("transform", "translate("+ (this.width/2) +","+(this.height-(60))+")")  // centre below axis
+          .text("Days of Week");
+
+         
+          //labels for svg -3
+          
+
             //clear bars
            
             var clear =[];
@@ -369,7 +389,23 @@ class Bars {
           .attr("transform", "translate(50," + 0 + ")")
           .call(y_axis);
 
+ // lables for svg-2
 
+ svg_2.selectAll(".xaxis text")  // select all the text elements for the xaxis
+ .attr("transform", function(d) {
+    return "translate(" + this.getBBox().this.height*-2 + "," + this.getBBox().height + ")rotate(-45)";
+});
+
+// now add titles to the axes
+svg_2.append("text")
+   .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+   .attr("transform", "translate("+ (50/4) +","+(this.height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+   .text("Pickups");
+
+svg_2.append("text")
+   .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+   .attr("transform", "translate("+ (this.width/2) +","+(this.height-(60))+")")  // centre below axis
+   .text("Hours of Day");
             
             //add bars
              var pickUpScale = d3.scaleLinear()
@@ -498,6 +534,26 @@ dow_hourly()
            svg_3.append("g").attr("id","yAxis3")
            .attr("transform", "translate(50," + 0 + ")")
            .call(y_axis);
+
+
+            // lables for svg-3
+
+          svg_3.selectAll(".xaxis text")  // select all the text elements for the xaxis
+          .attr("transform", function(d) {
+             return "translate(" + this.getBBox().this.height*-2 + "," + this.getBBox().height + ")rotate(-45)";
+         });
+    
+        // now add titles to the axes
+        svg_3.append("text")
+            .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+            .attr("transform", "translate("+ (50/4) +","+(this.height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+            .text("Pickups");
+  
+        svg_3.append("text")
+            .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+            .attr("transform", "translate("+ (this.width/2) +","+(this.height-(60))+")")  // centre below axis
+            .text("Hours of Day");
+
 
            //console.log(min + " " + max)
         var pickUpScale = d3.scaleLinear()
