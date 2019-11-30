@@ -300,15 +300,28 @@ console.log(max);
          d3.select("#yAxis2").remove();
 
           // Create scale
-          var xScale = d3.scaleLinear()
-          .domain([0,23])
-          .range([0, this.width*0.85])
+
+          var hours = [{hour:"0"},{hour:"1"},{hour:"2"},{hour:"3"},{hour:"4"},{hour:"5"},
+          {hour:"6"},{hour:"7"},{hour:"8"},{hour:"9"},{hour:"10"},{hour:"11"},{hour:"12"},
+          {hour:"13"},{hour:"14"},{hour:"15"},{hour:"16"},{hour:"17"},{hour:"18"},{hour:"19"},
+          {hour:"20"},{hour:"21"},{hour:"22"},{hour:"23"} 
+
+
+           ];
+
+        //  var xScale = d3.scaleLinear()
+         // .domain([0,23])
+         // .range([0, this.width*0.90])
+         var xScale = d3.scaleBand()
+         .domain(hours.map(function(d){ return d.hour}))
+         .range([0, this.width*0.85])
+
           // Add scales to axis
           var x_axis = d3.axisBottom()
-          .scale(xScale).ticks(23);
+          .scale(xScale).ticks(24);
           //Append group and insert axis
           svg_2.append("g").attr("id","xAxis2")
-          .attr("transform", "translate(55," + 300 + ")")
+          .attr("transform", "translate(50," + 300 + ")")
           .call(x_axis);
   
          //Y-SCALE-SVG2 - HOURLY
@@ -343,11 +356,11 @@ console.log(max);
             gBars.data(dow_data).enter().append("rect")
             .attr('x', function(d,i) {
                 console.log(d.key)
-                 return d.key*15 + 5;
+                 return d.key*14 + 11;
                }
             
             ).attr('y', function(d){return  300-pickUpScale(d.value)})
-            .attr('width',10).attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green")
+            .attr('width',200/24).attr('height',function(d){return pickUpScale(d.value)}).attr("fill","green")
             .transition()
             .duration(750)
            
@@ -438,7 +451,7 @@ dow_hourly()
            .scale(xScale).ticks(23);
            //Append group and insert axis
            svg_3.append("g").attr("id","xAxis3")
-           .attr("transform", "translate(55," + 300 + ")")
+           .attr("transform", "translate(50," + 300 + ")")
            .call(x_axis);
    
           //Y-SCALE-SVG3 - DOW-HOURLY
