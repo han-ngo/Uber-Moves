@@ -1,5 +1,20 @@
 class CircularSlider {
     constructor(domElement, segmentCount, draw_between_segment) {
+
+        this.axisTextFunc = null;
+        this.onChangeListener = [];
+
+        this.middleButtonPressedColor = "#00a884";
+        this.middleButtonReleaseColor = "#00b894";
+
+        this.middlePressed = false;
+
+        this.currentKnob = null;
+        this.currentX = 0;
+        this.currentY = 0;
+        this.offsetX = 0;
+        this.offsetY = 0;
+
         this.container = domElement;
         this.section_a = 0;
         this.section_b = 2.0 * Math.PI;
@@ -40,8 +55,6 @@ class CircularSlider {
         };
     }
 
-    currentKnob = null;
-
     length(x1, y1, x2, y2) {
         return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     }
@@ -73,11 +86,6 @@ class CircularSlider {
         }
         return newKnobPos;
     }
-
-    currentX = 0;
-    currentY = 0;
-    offsetX = 0;
-    offsetY = 0;
 
     onMouseDown(e) {
         let mousePos = this.getMousePos(e);
@@ -225,13 +233,6 @@ class CircularSlider {
         this.onChangeListener = [];
     }
 
-    onChangeListener = [];
-
-    middleButtonPressedColor = "#00a884";
-    middleButtonReleaseColor = "#00b894";
-
-    middlePressed = false;
-
     render() {
         this.canvas.getContext("2d").clearRect(0, 0, this.canvas_width, this.canvas_height);
 
@@ -338,8 +339,6 @@ class CircularSlider {
             }
         }
     }
-
-    axisTextFunc = null;
 
     draw_knob_text(pos, text = null, textOffset = 20) {
         let align = "left";

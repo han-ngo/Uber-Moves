@@ -10,6 +10,9 @@ class AppManager {
     }
 
     constructor() {
+        this.UberData = null;
+        this.NewYorkGeoJson = null;
+        
         if (AppManager.instance === null) {
             AppManager.instance = this
         }
@@ -27,8 +30,4 @@ class AppManager {
     setMap(map) {
         this.map = map;
     }
-
-    UberData;
-
-    NewYorkGeoJson;
 }

@@ -12,15 +12,14 @@ class BrushConfig {
 }
 class BrushSlider {
     constructor(domContainer, config) {
+        this.onChange = null;
+        this.onClear = null;
+
         this.container = domContainer;
         this.config = config;
 
         this.init();
     }
-
-    // callback
-    onChange = null;
-    onClear = null;
 
     init() {
         // append svg 

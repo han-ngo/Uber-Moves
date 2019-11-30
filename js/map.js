@@ -1,10 +1,10 @@
 class GeoMap {
     constructor() {
+        this.selectionCallbacks = [];
+        // 0 d3 layer, 1 heat layer, 2 cluster
+        this.mode = 0;
         this.init();
-    }
-
-    // 0 d3 layer, 1 heat layer, 2 cluster
-    mode = 0;
+    }    
 
     init() {
         this.hourFilteredArray = [];
@@ -443,6 +443,4 @@ class GeoMap {
     removeAllSelectionCallback() {
         this.selectionCallbacks.clear();
     }
-
-    selectionCallbacks = [];
 }
