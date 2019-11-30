@@ -82,6 +82,11 @@ class CircularSlider {
     onMouseDown(e) {
         let mousePos = this.getMousePos(e);
 
+        if (this.length(mousePos.x, mousePos.y, this.center_x, this.center_y) <= this.radius_inner - 40) {
+            this.middlePressed = true;
+            this.render();
+        }
+
         // check press which knob
         // select knob b first
         if (this.knotDetect(mousePos.x, mousePos.y, this.section_b)) {
@@ -132,31 +137,23 @@ class CircularSlider {
         }
     }
 
-    getFilteredArrBySection()
-    {
+    getFilteredArrBySection() {
         let result = [];
 
-        if(this.section_b_index == this.section_a_index)
-        {
+        if (this.section_b_index == this.section_a_index) {
         }
-        else if(this.section_b_index > this.section_a_index)
-        {
-            for(let i = this.section_a_index; i <= this.section_b_index - 1; i++)
-            {
+        else if (this.section_b_index > this.section_a_index) {
+            for (let i = this.section_a_index; i <= this.section_b_index - 1; i++) {
                 result.push(i);
             }
         }
-        else
-        {
+        else {
             let removeList = [];
-            for(let i = this.section_b_index; i <= this.section_a_index - 1; i++)
-            {
+            for (let i = this.section_b_index; i <= this.section_a_index - 1; i++) {
                 removeList.push(i);
             }
-            for(let i = 0; i < this.segment_count; i++)
-            {
-                if(removeList.indexOf(i) == -1)
-                {
+            for (let i = 0; i < this.segment_count; i++) {
+                if (removeList.indexOf(i) == -1) {
                     result.push(i);
                 }
             }
@@ -164,11 +161,10 @@ class CircularSlider {
         return result;
     }
 
-    setSection(sectionA, sectionB)
-    {
+    setSection(sectionA, sectionB) {
         this.section_a = sectionA;
         this.section_b = sectionB;
-        
+
         this.section_b_obj = this.snap(this.section_b);
         this.section_b = this.section_b_obj.pos;
         this.section_b_index = this.section_b_obj.index;
@@ -185,6 +181,11 @@ class CircularSlider {
 
     onMouseUp(e) {
         let mousePos = this.getMousePos(e);
+        if (this.middlePressed) {
+            this.middlePressed = false;
+            this.setSection(0, 2.0 * Math.PI);
+            this.render();
+        }
         if (this.currentKnob == 2) {
             this.section_b_obj = this.snap(this.section_b);
             this.section_b = this.section_b_obj.pos;
@@ -220,26 +221,43 @@ class CircularSlider {
         this.onChangeListener.push(callback);
     }
 
-    clearOnChangeListener()
-    {
+    clearOnChangeListener() {
         this.onChangeListener = [];
     }
 
     onChangeListener = [];
+
+    middleButtonPressedColor = "#00a884";
+    middleButtonReleaseColor = "#00b894";
+
+    middlePressed = false;
 
     render() {
         this.canvas.getContext("2d").clearRect(0, 0, this.canvas_width, this.canvas_height);
 
         this.draw_circle(this.radius_outer, 0, 2 * Math.PI, "#74b9ff");
 
-        
+
         this.draw_circle(this.radius_outer, this.section_a, this.section_b, "#00b894");
 
         this.draw_circle(this.radius_inner, 0, 2 * Math.PI, "#dfe6e9");
 
         this.draw_circle(this.radius_inner, this.section_a, this.section_b, "#636e72");
         this.draw_circle_line(this.radius_outer + 45, this.section_a, this.section_b, "#636e72");
-        
+
+        if (this.middlePressed) {
+            this.draw_circle(this.radius_inner - 40, 0, 2 * Math.PI, this.middleButtonPressedColor);
+        }
+        else {
+            this.draw_circle(this.radius_inner - 40, 0, 2 * Math.PI, this.middleButtonReleaseColor);
+        }
+
+        let ctx = this.canvas.getContext("2d");
+        ctx.font = "12px Arial";
+        ctx.fillStyle = "#535e62";
+        ctx.textAlign = "center";
+        ctx.fillText("Reset", this.center_x, this.center_y + 3);
+
         this.draw_knob(this.section_a);
         this.draw_knob(this.section_b);
 
@@ -297,14 +315,13 @@ class CircularSlider {
                 ctx.translate(text_x, text_y);
                 ctx.rotate(pos + deltaBetween * 0.5 + Math.PI / 2);
 
-                ctx.font = "12px Comic Sans MS";
+                ctx.font = "12px Arial";
                 ctx.fillStyle = "black";
                 ctx.textAlign = "center";
                 ctx.fillText(this.axisTextFunc == null ? i : this.axisTextFunc(i), 0, 0);
                 ctx.restore();
             }
-            else
-            {
+            else {
                 ctx.save();
 
                 let text_x = this.center_x + (this.radius_outer + segmentLength + 20) * Math.cos(pos);
@@ -313,7 +330,7 @@ class CircularSlider {
                 ctx.translate(text_x, text_y);
                 ctx.rotate(pos);
 
-                ctx.font = "12px Comic Sans MS";
+                ctx.font = "12px Arial";
                 ctx.fillStyle = "black";
                 ctx.textAlign = "center";
                 ctx.fillText(this.axisTextFunc == null ? i : this.axisTextFunc(i), 0, 0);
@@ -335,7 +352,7 @@ class CircularSlider {
         let text_y = this.center_y + ((this.radius_outer + this.radius_inner) * 0.5 + textOffset) * Math.sin(pos);
 
         let ctx = this.canvas.getContext("2d");
-        ctx.font = "18px Comic Sans MS";
+        ctx.font = "18px Arial";
         ctx.fillStyle = "black";
         ctx.textAlign = align;
         ctx.fillText(text == null ? pos : "Hello World", text_x, text_y);
@@ -352,8 +369,7 @@ class CircularSlider {
         ctx.fill();
     }
 
-    draw_circle_line(radius, start, end, color)
-    {
+    draw_circle_line(radius, start, end, color) {
         let ctx = this.canvas.getContext('2d');
         ctx.beginPath();
         ctx.arc(this.center_x, this.center_y, radius, start, end);
