@@ -117,7 +117,11 @@ d3.json("data/newyork.geojson").then(nyGeoJson => {
             setTimeout(()=>{
                 map.SetSelection(preset2Coord);
             }, 700);
-            // hourCircularSlider.setSection(1.6, 2.74);
+            
+            // // from 5 to 10
+            // hourCircularSlider.setSection((2.0 * Math.PI / 24) * 5, (2.0 * Math.PI / 24) * 10);
+            // // from Mon to Wes
+            // weekCircularSlider.setSection((2.0 * Math.PI / 7) * 0, (2.0 * Math.PI / 7) * 3);
         }
 
         let preset3Coord = {x: -74.0007401123047, y: 40.749231472225716};
