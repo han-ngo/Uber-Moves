@@ -102,7 +102,7 @@ d3.json("data/newyork.geojson").then(nyGeoJson => {
         // table
         let table = new Table(uberData);
         table.createTable();
-
+        
         document.getElementById("preset1").onclick = (e)=>{
             map.SetCenterAndZoom([-73.88227539062501, 40.7743300930085], 12);
             setTimeout(()=>{

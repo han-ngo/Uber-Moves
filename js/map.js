@@ -26,8 +26,8 @@ class GeoMap {
             .style("height", "520px");
 
         var map = new maptalks.Map(MAP_CONTAINER, {
-            center: [-73.3, 40.769],
-            zoom: 8,
+            center: [-73.82736212158204, 40.77890381880605],
+            zoom: 11,
             minZoom: 8, // set map's min zoom to 14
             maxZoom: 18,
             centerCross: false,
