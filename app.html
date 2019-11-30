@@ -74,14 +74,86 @@
                     <div class="card my-card">
                         <h5 class="card-header my-header-padding">Preset</h5>
                         <div id="preset" class="card-body my-body-padding">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">Cras justo odio<br /><button id="preset1"
-                                        type="button" class="btn btn-outline-info">Preset A</button></li>
-                                <li class="list-group-item">Dapibus ac facilisis in<br /><button id="preset2"
-                                        type="button" class="btn btn-outline-info">Preset B</button></li>
-                                <li class="list-group-item">Vestibulum at eros<br /><button id="preset3"
-                                        type="button" class="btn btn-outline-info">Preset C</button></li>
-                            </ul>
+                            <div class="accordion" id="accordionExample">
+                                <div class="card">
+                                    <div class="card-header" id="headingOne">
+                                        <h2 class="mb-0">
+                                            <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                data-target="#collapseOne" aria-expanded="true"
+                                                aria-controls="collapseOne">
+                                                Preset 1
+                                            </button>
+                                        </h2>
+                                    </div>
+
+                                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne"
+                                        data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="card my-card">
+                                                <img src="assets/preset1.png" class="card-img-top" alt="...">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Card title</h5>
+                                                    <p>Image from <a href="https://www.toeuropeandbeyond.com/things-to-do-in-the-west-village-new-york-city/">toeuropeandbeyond.com</a></p>
+                                                    <p class="card-text">Some quick example text to build on the card
+                                                        title and make up the bulk of the card's content.</p>
+                                                    <a id="preset1" href="#" class="btn btn-primary">Go there</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="headingTwo">
+                                        <h2 class="mb-0">
+                                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                                data-target="#collapseTwo" aria-expanded="false"
+                                                aria-controls="collapseTwo">
+                                                Preset 2
+                                            </button>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                                        data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="card my-card">
+                                                <img src="assets/preset2.png" class="card-img-top" alt="...">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Card title</h5>
+                                                    <p>Image from <a href="https://www.tripadvisor.com/LocationPhotoDirectLink-g60763-d235228-i183961747-Midtown_Convention_Center_Hotel-New_York_City_New_York.html">tripadvisor.com</a></p>
+                                                    <p class="card-text">Some quick example text to build on the card
+                                                        title and make up the bulk of the card's content.</p>
+                                                    <a id="preset2" href="#" class="btn btn-primary">Go there</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="headingThree">
+                                        <h2 class="mb-0">
+                                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                                data-target="#collapseThree" aria-expanded="false"
+                                                aria-controls="collapseThree">
+                                                Preset 3
+                                            </button>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                                        data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="card my-card">
+                                                <img src="..." class="card-img-top" alt="...">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Card title</h5>
+                                                    <p class="card-text">Some quick example text to build on the card
+                                                        title and make up the bulk of the card's content.</p>
+                                                    <a id="preset3" href="#" class="btn btn-primary">Go there</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
