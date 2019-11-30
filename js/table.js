@@ -1,5 +1,3 @@
-// var Tabulator = require('tabulator-tables');
-
 class Table {
     /**
      * Creates a Table Object
@@ -28,8 +26,16 @@ class Table {
         //.style('height',this.height + 'px');
         // let tableComponent = div.append('table').attr('width',this.width).attr('height',this.height);
 
+        var dateFormatter = function (cell, formatterParams, onRendered) {
+            return cell.getValue().toDateString();
+        };
+        
+        var timeFormatter = function (cell, formatterParams, onRendered) {
+            return cell.getValue().toTimeString();
+        };
+
         this.table = new Tabulator("#table", {
-            autoResize:true,
+          autoResize:true,
           data: this.data, //load row data from array
           layout: "fitColumns", //fit columns to width of table
           responsiveLayout: "hide", //hide columns that dont fit on the table
@@ -40,6 +46,7 @@ class Table {
           paginationSize: 7, //allow 7 rows per page of data
           movableColumns: true, //allow column order to be changed
           resizableRows: true, //allow row order to be changed
+          groupBy: "District",
           initialSort: [
             //set the initial sort order of the data
             { column: "District", dir: "asc" }
@@ -47,31 +54,17 @@ class Table {
           // Date/Time,Lat,Lon,Weight,Base,key,total_same_keys,Dow,Hour_of_Day,District
           columns: [
             //define the table columns
-            { title: "Date/Time", field: "date", width:300 },
-            // { title: "Lat", field: "lat", visible: "false" },
-            // { title: "Lon", field: "lon", visible: "false" },
-            // { title: "Weight", field: "weight", visible: "false" },
-            // { title: "Base", field: "base", visible: "false" },
-            // { title: "key", field: "key", visible: "false" },
-            // { title: "Total Same Key", field: "totalSameKey", visible: "false" },
-            { title: "Day Of Week", field: "Dow", sorter: "number", width:100 },
-            { title: "Time", field: "Hour_of_Day", sorter: "number", width:100 },
-            { title: "District", field: "District", sorter: "string", sorterParams:{alignEmptyValues:"bottom"}, widthGrow:1 }
+            { title: "District", field: "District", sorter: "string", sorterParams: { alignEmptyValues: "bottom" } },
+            { title: "Date/Time", field: "date", formatter: dateFormatter, width: 150, sorter: function (a, b, aRow, bRow, column, dir, sorterParams) { return a - b; },},
+            { title: "Time", field: "date", formatter: timeFormatter, sorter: "alphanum", width: 300, widthGrow: 1 }
           ]
         });
+
+        
 
         AppManager.getInstance().getMap().onSelection((data)=>{
             this.updateData(data);
         });
-        // hide unnecessary columns
-        // table.hideColumn("lat");
-        // table.hideColumn("lon");
-        // table.hideColumn("weight");
-        // table.hideColumn("base");
-        // table.hideColumn("key");
-        // table.hideColumn("totalSameKey");
-
-        // this.updateTable();
     }
 
 

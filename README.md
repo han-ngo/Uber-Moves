@@ -6,5 +6,3 @@ $ python -m SimpleHTTPServer 8080
 $ python -m http.server 8080
 
 You can then view the page at http://localhost:8080/
-
-TODO http://tabulator.info/
