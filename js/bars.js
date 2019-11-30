@@ -127,6 +127,7 @@ class Bars {
             .entries(this.data);
     
             var dow_data= nested_data;
+            console.log(dow_data);
             dow_data.sort(function(x, y){
                 return d3.ascending(x.key, y.key);
              })
@@ -257,12 +258,15 @@ class Bars {
             })
             .entries(this.data);
     
+            console.log(nested_data[1]);
             var dow_data= nested_data;
+ 
             dow_data.sort(function(x, y){
                 return d3.ascending(parseInt(x.key), parseInt(y.key));
              })
             
-             console.log(dow_data);
+        
+
 
              //get max of all pickup count values per dow_hourly
        let max = d3.max(dow_data, function(d,i) 
@@ -278,6 +282,9 @@ class Bars {
        });
 
     
+console.log(min);
+console.log(max);
+
 
             //clear bars
            
@@ -320,20 +327,22 @@ class Bars {
             
             //add bars
              var pickUpScale = d3.scaleLinear()
-            .domain([min, max])
+            .domain([0, max])
             .range([0, 250]);
     
              // remove old data
-         d3.select("#grect2").remove();
+         d3.selectAll("#grect2").remove();
 
             let g =this.container.select('#svg2').append('g').attr("transform","translate(42,0)").attr("id","grect2");
 
             let gBars =this.container.select('#svg2').select('#grect2').selectAll('rect');
 
-            console.log(dow_data);
+            console.log(dow_data[0]);
+            console.log(dow_data[1]);
+            
             gBars.data(dow_data).enter().append("rect")
             .attr('x', function(d,i) {
-                
+                console.log(d.key)
                  return d.key*15 + 5;
                }
             
@@ -628,9 +637,9 @@ filtByWeekDayArr(filteredArray) {
             return "Days: " + dow[fromDay].day +  " Only"; 
             });
        
+            this.bars_dow();
 
        this.bars_hourly();
-       this.bars_dow();
 
 }
 
