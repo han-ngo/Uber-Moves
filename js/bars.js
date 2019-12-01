@@ -80,7 +80,11 @@ class Bars {
             
         
 
-        let color =["#7bc0e4","#c96367","#cb85ab","#5d5d5d","#c0b987","#f5c987","#d94b4d"];
+        //let color =["#7bc0e4","#c96367","#cb85ab","#5d5d5d","#c0b987","#f5c987","#d94b4d"];
+        //let color =["#F5CBA7","#F9E79F","#A3E4D7","#AED6F1","#D2B4DE","#F5B7B1","#F5B7B1"];
+        let color =["#F1C40F","#27AE60","#1ABC9C","#2980B9","#9B59B6","#E74C3C","#EB984E"];
+
+
          let dow_hour_ID = d3.selectAll('body').select('#svg3').append('g').attr("id","dow-hour-id").selectAll("rect");
    /*      dow_hour_ID.data(dow).enter().append("rect")
         .attr("x", (d,i) => 60 + i*45)
@@ -680,7 +684,10 @@ dow_hourly()
         .x((d, i) =>  d.key*14 + 50)
         .y(function(d) { return 300-pickUpScale(d.value)});
 
-        let color =["#7bc0e4","#c96367","#cb85ab","#5d5d5d","#c0b987","#f5c987","#d94b4d"];
+        //let color =["#7bc0e4","#c96367","#cb85ab","#5d5d5d","#c0b987","#f5c987","#d94b4d"];
+       // let color =["#F5CBA7","#F9E79F","#A3E4D7","#AED6F1","#D2B4DE","#F5B7B1","#F5B7B1"];
+             let color =["#F1C40F","#27AE60","#1ABC9C","#2980B9","#9B59B6","#E74C3C","#EB984E"];
+
 
     for(var i=0;i<dow_data.length;i++)
         {
