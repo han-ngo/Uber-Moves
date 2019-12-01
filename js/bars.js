@@ -206,7 +206,16 @@ class Bars {
 
         // check total pickups per day of week - returns 7 days with total pickups per each day
             var nested_data = d3.nest()
-            .key(function(d) { return d.Dow; })
+            .key(function(d) {
+                if(d!=null)
+                { 
+                    return d.Dow;
+                } 
+                else
+                {
+                    return null;
+                }
+            })
             .rollup(function(ids) {
                 return ids.length; 
             })
