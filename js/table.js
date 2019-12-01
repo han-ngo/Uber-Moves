@@ -56,7 +56,7 @@ class Table {
           columns: [
             //define the table columns
             { title: "District", field: "District", sorter: "string", sorterParams: { alignEmptyValues: "bottom" } },
-            { title: "Date/Time", field: "date", formatter: dateFormatter, width: 150, sorter: function (a, b, aRow, bRow, column, dir, sorterParams) { return a - b; },},
+            { title: "Date", field: "date", formatter: dateFormatter, width: 150, sorter: function (a, b, aRow, bRow, column, dir, sorterParams) { return a - b; },},
             { title: "Time", field: "date", formatter: timeFormatter, sorter: "alphanum", width: 300, widthGrow: 1 }
           ]
         });
