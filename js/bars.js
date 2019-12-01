@@ -94,10 +94,17 @@ class Bars {
         dow_hour_ID.data(dow).enter().append("text")
 
          .attr("x", (d,i)=> 70 + i * 45)
-        .attr("y", 10)
+        .attr("y", 30)
         .attr("dy", ".35em")
         .text((d,i)=> dow[i])
         .style('fill', (d,i)=>color[i]);
+
+       d3.selectAll('body').select('#svg3').append("text")
+        .attr("x", 170)
+       .attr("y", 10)
+       .attr("dy", ".35em")
+       .text("All Pickups")
+       .style('fill', 'black');
 
 
 
@@ -112,8 +119,9 @@ class Bars {
             }
 
 
-        this.updateBars();
-
+            this.bars_dow();
+        
+            this.bars_hourly();
          });
         
         this.updateBars();
@@ -121,6 +129,7 @@ class Bars {
 
     updateBars()
     {
+        console.log("what");
         this.bars_dow();
         
         this.bars_hourly();
@@ -727,7 +736,7 @@ filtByHourTimeArr(filteredArray) {
     this.bars_dow();
     this.bars_hourly();
 
-    this.dow_hourly();
+   // this.dow_hourly();
 }
 
 filtByWeekDayArr(filteredArray) {
@@ -851,7 +860,7 @@ filtByWeekDayArr(filteredArray) {
             this.bars_dow();
 
        this.bars_hourly();
-       this.dow_hourly();
+     //  this.dow_hourly();
 
 }
 
