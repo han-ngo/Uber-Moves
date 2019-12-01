@@ -96,8 +96,44 @@ class Bars {
          .attr("x", (d,i)=> 70 + i * 45)
         .attr("y", 30)
         .attr("dy", ".35em")
+        .style("font-size", "16px")
         .text((d,i)=> dow[i])
-        .style('fill', (d,i)=>color[i]);
+        .style('fill', (d,i)=>color[i])
+        .on("mouseover", function(d,i){
+             d3.select(this).style("font-size", "20px")
+           let line= d3.select("#svg3").select("#gline3").select("#" + "path" + i);
+                 line.attr("stroke-width", "2")
+                 .style("stroke-opacity", 1) // set the stroke opacity
+            for(var j=0;j<7;j++)
+            {
+                if(j!=i)
+                {
+                let line= d3.select("#svg3").select("#gline3").select("#" + "path" + j);
+                 line.attr("stroke-width", "1.5")
+                 .style("stroke-opacity", .2) // set the stroke opacity
+                }
+            }
+
+
+
+        })
+        .on("mouseout", function(d,i){
+             d3.select(this).style("font-size", "16px")
+             let line= d3.select("#svg3").select("#gline3").select("#" + "path" + i);
+                  line.attr("stroke-width", "1.5")
+
+                  for(var j=0;j<7;j++)
+            {
+             
+                {
+                let line= d3.select("#svg3").select("#gline3").select("#" + "path" + j);
+                 line.attr("stroke-width", "1.5")
+                 .style("stroke-opacity", 1) // set the stroke opacity
+                }
+            }
+
+        })
+
 
        d3.selectAll('body').select('#svg3').append("text")
         .attr("x", 170)
@@ -655,7 +691,7 @@ dow_hourly()
 
 //console.log(data)
 
-let Xpath= d3.selectAll("#svg3").select("#gline3").append('path').attr("opacity",1)
+let Xpath= d3.selectAll("#svg3").select("#gline3").append('path').attr("id","path" + i).attr("opacity",1)
 .attr("transform","translate(0,0)")
 //.attr("stroke", "#086fad")
 .attr("stroke-width", "1.5")
