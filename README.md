@@ -27,10 +27,28 @@ You can then view the page at http://localhost:8080/
 * **table.js**: Table component base code.
 * **appmanager.js**: A singleton class which provides global access ability between different components.
 * **circularslider.js**: A circular brush slider used for days selection and hours selection, based on canvas rendering.
-* **Brushslider.js**: A linear brush slider used for days selection and hours selection, already deprecated.
+* **brushslider.js**: A linear brush slider used for days selection and hours selection, already deprecated.
+* **map.js**: Map implenmentation, Rendering and managing the whole map viewport.
 
 Third-party dependency:
 * [Maptalks](https://maptalks.org/): The map vis library.
 * [Bootstrap](https://getbootstrap.com/): Layout and some other components like Collapse, Card.
 * [Reveal.js](https://revealjs.com/): For our project website, a presentation style framework.
 * [Tabulator](http://tabulator.info/): For creating the interactive table
+
+## Non-Obvious Features
+
+#### Preset
+You can quikly navigate into specific setting by click preset button. It is a feature for storytelling.
+
+#### Reset
+Map state and circular slider state can be reset by click reset button. Reset button for map is on the top right. Circular slider's reset button is on the center of itself.
+
+#### Map Mode
+Map has 3 modes, Cluster mode, Circle mode, Heatmap mode. You can change it by click map mode button which locates at the top right.
+
+#### Table Sort
+You can sort based on property by clicking header.
+
+#### Line chart highlight
+You can click color marker to highlight the corresponding line.
