@@ -16,6 +16,42 @@ $ python -m http.server 8080
 ```
 You can then view the page at http://localhost:8080/
 
+## Folder Structure
+
+```
+├─assets
+├─cpp
+│  ├─include        
+│  └─src
+├─css
+├─data 
+├─data processing
+│  └─js
+├─js (most codes are here)
+│  └─component
+└─thirdparty 
+    ├─maptalks
+    └─tabulator-master
+        ├─.github
+        │  └─ISSUE_TEMPLATE
+        ├─dist
+        │  ├─css
+        │  │  ├─bootstrap
+        │  │  ├─bulma
+        │  │  ├─materialize
+        │  │  └─semantic-ui
+        │  └─js
+        │      └─modules
+        └─src
+            ├─js
+            │  └─modules
+            └─scss
+                ├─bootstrap
+                ├─bulma
+                ├─materialize
+                └─semantic-ui
+```
+
 ## Code Documentation
 
 * [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML): The main HTML is app.html which provides the base for the visualization on the web browser.
