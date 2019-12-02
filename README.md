@@ -30,7 +30,7 @@ You can then view the page at http://localhost:8080/
 * **Brushslider.js**: A linear brush slider used for days selection and hours selection, already deprecated.
 
 Third-party dependency:
-* [Map Talk](https://maptalks.org/): The map vis library.
+* [Maptalks](https://maptalks.org/): The map vis library.
 * [Bootstrap](https://getbootstrap.com/): Layout and some other components like Collapse, Card.
 * [Reveal.js](https://revealjs.com/): For our project website, a presentation style framework.
 * [Tabulator](http://tabulator.info/): For creating the interactive table
